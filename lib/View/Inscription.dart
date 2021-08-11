@@ -1,31 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:safetysecurity/View/Authentification.dart';
 
 import '../globalsVariables.dart';
-import 'Inscription.dart';
-import 'ResetPWD.dart';
 
-class Authentification extends StatefulWidget{
+class Inscription extends StatefulWidget{
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _Authentification();
+    return _Inscription();
   }
 }
 
-class _Authentification extends State<Authentification>{
+class _Inscription extends State<Inscription>{
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  final FocusNode myUserNameFocus = FocusNode();
   final FocusNode myEmailFocus = FocusNode();
+  final FocusNode myTelephoneFocus = FocusNode();
   final FocusNode myPasswordFocus = FocusNode();
 
-  TextEditingController EmailController = new TextEditingController();
-  TextEditingController PassWordController = new TextEditingController();
+  TextEditingController myUserNameController = new TextEditingController();
+  TextEditingController myEmailController = new TextEditingController();
+  TextEditingController myTelephoneController = new TextEditingController();
+  TextEditingController myPasswordController = new TextEditingController();
 
-  bool _obscureTextLogin = true;
+  bool _obscureText = true;
 
   final formKey = new GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +43,7 @@ class _Authentification extends State<Authentification>{
             entete(context),
 
             Text(
-              'Authentification',
+              'Inscription',
               style: TextStyle(
                 fontFamily: 'Roboto',
                 fontSize: width(context) / 10,
@@ -60,17 +65,17 @@ class _Authentification extends State<Authentification>{
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: TextField(
-                        focusNode: myEmailFocus,
-                        controller: EmailController,
-                        keyboardType: TextInputType.emailAddress,
+                        focusNode: myUserNameFocus,
+                        controller: myUserNameController,
+                        keyboardType: TextInputType.text,
                         style: TextStyle(
-                          fontSize: width(context) / 25
+                            fontSize: width(context) / 25
                         ),
                         decoration: InputDecoration(
-                          hintText: "Adresse Mail |",
-                          border: new OutlineInputBorder(
-                            borderSide: new BorderSide(color: Colors.brown)
-                          )
+                            hintText: "Nom d'utilisateur |",
+                            border: new OutlineInputBorder(
+                                borderSide: new BorderSide(color: Colors.brown)
+                            )
                         ),
                       ),
                     ),
@@ -78,59 +83,70 @@ class _Authentification extends State<Authentification>{
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: TextField(
-                        focusNode: myPasswordFocus,
-                        controller: PassWordController,
-                        obscureText: _obscureTextLogin,
+                        focusNode: myEmailFocus,
+                        controller: myEmailController,
+                        keyboardType: TextInputType.emailAddress,
                         style: TextStyle(
                             fontSize: width(context) / 25
                         ),
                         decoration: InputDecoration(
-                            hintText: "Mot de passe |",
+                            hintText: "Adresse Mail |",
                             border: new OutlineInputBorder(
                                 borderSide: new BorderSide(color: Colors.brown)
-                            ),
-                          suffixIcon: GestureDetector(
-                            onTap: _toggleLogin,
-                            child: Icon(
-                              _obscureTextLogin
-                                  ? FontAwesomeIcons.eyeSlash
-                                  : FontAwesomeIcons.eye,
-                              size: width(context) / 25,
-                              color: Colors.black,
-                            ),
-                        ),
-                      ),
-                    )
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right:15.0, bottom: 15.0),
-                      child: GestureDetector(
-                        onTap: (){
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context){
-                                return ResetPassword();
-                              })
-                          );
-                        },
-                        child: Text(
-                          'Mot de passe oublié?',
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 14,
-                            color: const Color(0xff2a0202),
-                            height: 1.2142857142857142,
-                          ),
-                          textHeightBehavior:
-                          TextHeightBehavior(applyHeightToFirstAscent: false),
-                          textAlign: TextAlign.right,
+                            )
                         ),
                       ),
                     ),
 
                     Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: button("Connexion", context, (){}),
+                      child: TextField(
+                        focusNode: myTelephoneFocus,
+                        controller: myTelephoneController,
+                        keyboardType: TextInputType.phone,
+                        style: TextStyle(
+                            fontSize: width(context) / 25
+                        ),
+                        decoration: InputDecoration(
+                            hintText: "N° Téléphone |",
+                            border: new OutlineInputBorder(
+                                borderSide: new BorderSide(color: Colors.brown)
+                            )
+                        ),
+                      ),
+                    ),
+
+                    Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: TextField(
+                          focusNode: myPasswordFocus,
+                          controller: myPasswordController,
+                          obscureText: _obscureText,
+                          style: TextStyle(
+                              fontSize: width(context) / 25
+                          ),
+                          decoration: InputDecoration(
+                            hintText: "Mot de passe |",
+                            border: new OutlineInputBorder(
+                                borderSide: new BorderSide(color: Colors.brown)
+                            ),
+                            suffixIcon: GestureDetector(
+                              onTap: _toggleLogin,
+                              child: Icon(
+                                _obscureText
+                                    ? FontAwesomeIcons.eyeSlash
+                                    : FontAwesomeIcons.eye,
+                                size: width(context) / 25,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        )
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: button("Inscription", context, (){}),
                     ),
 
                     SizedBox(height:10.0),
@@ -140,7 +156,7 @@ class _Authentification extends State<Authentification>{
                         Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context){
-                              return Inscription();
+                              return Authentification();
                             })
                         );
                       },
@@ -154,7 +170,7 @@ class _Authentification extends State<Authentification>{
                           ),
                           children: [
                             TextSpan(
-                              text: 'Vous n\'avez pas compte?',
+                              text: 'Vous avez un compte?',
                             ),
                             TextSpan(
                               text: ' ',
@@ -163,7 +179,7 @@ class _Authentification extends State<Authentification>{
                               ),
                             ),
                             TextSpan(
-                              text: 'Inscrivez-vous.',
+                              text: 'Connectez-vous.',
                               style: TextStyle(
                                 color: const Color(0xff0019b9),
                                 decoration: TextDecoration.underline,
@@ -174,7 +190,9 @@ class _Authentification extends State<Authentification>{
                         textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
                         textAlign: TextAlign.center,
                       ),
-                    )
+                    ),
+
+                    SizedBox(height: 10.0)
                   ],
                 ),
               ),
@@ -187,7 +205,7 @@ class _Authentification extends State<Authentification>{
 
   void _toggleLogin() {
     setState(() {
-      _obscureTextLogin = !_obscureTextLogin;
+      _obscureText = !_obscureText;
     });
   }
 }
