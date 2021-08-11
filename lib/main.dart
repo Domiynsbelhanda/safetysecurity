@@ -22,12 +22,12 @@ class _MyApp extends State<MyApp>{
     // TODO: implement build
     return MaterialApp(
       title: "Safety Security",
-      color: Color(0x0099C0E1),
+      color: Colors.lightBlue,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         backgroundColor: Colors.white,
-        primaryColor: Color(0xFF99C0E1),
-        accentColor: Color(0xFF4E392A),
+        primaryColor: Colors.lightBlue,
+        accentColor: Colors.brown,
         textTheme: GoogleFonts.robotoTextTheme(
           Theme.of(context).textTheme,
         ),
