@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'View/Authentification.dart';
 
 void main() {
+  SystemChrome.setEnabledSystemUIOverlays([]);
   runApp(MyApp());
 }
 
@@ -17,6 +19,8 @@ class MyApp extends StatefulWidget{
 }
 
 class _MyApp extends State<MyApp>{
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -34,5 +38,10 @@ class _MyApp extends State<MyApp>{
       ),
       home: Authentification(),
     );
+  }
+
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIOverlays([]);
   }
 }

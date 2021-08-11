@@ -20,17 +20,41 @@ Widget entete(context) {
       )
     ),
     child: Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(10.0),
       child: Text(
         'SAFETY SECURITY',
         style: TextStyle(
           fontFamily: 'Roboto',
-          fontSize: width(context) / 17,
+          fontSize: width(context) / 16,
           color: const Color(0xff4e392a),
           fontWeight: FontWeight.w700,
         ),
         textAlign: TextAlign.center,
       ),
     )
+  );
+}
+
+Widget button(text, context, function){
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(5.0),
+      color: Color(0xff77ACE3),
+    ),
+    child: TextButton(
+      onPressed: function,
+      child: Text(
+        '${text}',
+        style: TextStyle(
+          fontFamily: 'Roboto',
+          fontSize: 16,
+          color: const Color(0xff2a0202),
+          fontWeight: FontWeight.w700,
+          height: 1.0625,
+        ),
+        textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
+        textAlign: TextAlign.center,
+      ),
+    ),
   );
 }
