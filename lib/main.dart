@@ -22,7 +22,7 @@ class _MyApp extends State<MyApp>{
       color: Color(0x0099C0E1),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        
+        backgroundColor: Colors.white
       ),
     );
   }
