@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:safetysecurity/Controller/Authentification.dart';
 
 import '../globalsVariables.dart';
-import 'Authentification.dart';
+import 'Connexion.dart';
 
 class ResetPassword extends StatefulWidget{
   @override
@@ -12,6 +13,8 @@ class ResetPassword extends StatefulWidget{
 }
 
 class _ResetPassword extends State<ResetPassword>{
+
+  Authentifications authentifications = new Authentifications();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -71,7 +74,14 @@ class _ResetPassword extends State<ResetPassword>{
 
                     Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: button("Envoyez l'email", context, (){}),
+                      child: button("Envoyez l'email", context, (){
+                        if(EmailController.text.isEmpty){
+                          showInSnackBar("Entrez une adresse mail", _scaffoldKey, context);
+                          return;
+                        }
+
+                        authentifications.resetmail(EmailController.text, context, _scaffoldKey);
+                      }),
                     ),
 
                     SizedBox(height:10.0),

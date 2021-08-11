@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1026488157555",
+    "project_id": "safetysecurity-e731e",
+    "storage_bucket": "safetysecurity-e731e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1026488157555:android:562af3531d820e16beb106",
+        "android_client_info": {
+          "package_name": "com.domiyns.safetysecurity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1026488157555-np7aps0ini8282170mjskben0g6la4h9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFUtgq4CI5XR0RBlnbYFPi95C0WB1b6zA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1026488157555-np7aps0ini8282170mjskben0g6la4h9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

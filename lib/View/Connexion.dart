@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:safetysecurity/Controller/Authentification.dart';
 
 import '../globalsVariables.dart';
 import 'Inscription.dart';
@@ -14,6 +15,8 @@ class Authentification extends StatefulWidget{
 }
 
 class _Authentification extends State<Authentification>{
+  
+  Authentifications authentifications = Authentifications();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -130,7 +133,22 @@ class _Authentification extends State<Authentification>{
 
                     Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: button("Connexion", context, (){}),
+                      child: button("Connexion", context, (){
+                        if(EmailController.text.isEmpty){
+                          showInSnackBar('Entrez une adresse mail', _scaffoldKey, context);
+                          return;
+                        }
+
+                        if(PassWordController.text.isEmpty) {
+                          showInSnackBar("Entrez un mot de passe", _scaffoldKey, context);
+                          return;
+                        }
+                        
+                        authentifications.SignIn(
+                            EmailController.text,
+                            PassWordController.text, context, _scaffoldKey);
+
+                      }),
                     ),
 
                     SizedBox(height:10.0),

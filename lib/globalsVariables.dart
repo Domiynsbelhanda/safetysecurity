@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 double width(context) {
@@ -58,3 +59,21 @@ Widget button(text, context, function){
     ),
   );
 }
+
+void showInSnackBar(String value, _scaffoldKey, context) {
+  FocusScope.of(context).requestFocus(new FocusNode());
+  _scaffoldKey.currentState?.removeCurrentSnackBar();
+  _scaffoldKey.currentState.showSnackBar(new SnackBar(
+    content: new Text(
+      value,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 16.0,),
+    ),
+    backgroundColor: Colors.blue,
+    duration: Duration(seconds: 3),
+  ));
+}
+
+User currentFirebaseUser;

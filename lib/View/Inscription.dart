@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:safetysecurity/View/Authentification.dart';
+import 'package:safetysecurity/View/Connexion.dart';
+import '../Controller/Authentification.dart';
 
 import '../globalsVariables.dart';
 
@@ -14,6 +15,8 @@ class Inscription extends StatefulWidget{
 }
 
 class _Inscription extends State<Inscription>{
+
+  Authentifications authentifications = new Authentifications();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -146,7 +149,54 @@ class _Inscription extends State<Inscription>{
 
                     Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: button("Inscription", context, (){}),
+                      child: button("Inscription", context, (){
+                        if(myUserNameController.text.isEmpty){
+                          showInSnackBar("Entrez un UserName.", _scaffoldKey, context);
+                          return;
+                        }
+
+                        if(myUserNameController.text.length < 5){
+                          showInSnackBar("Nom d'utilisateur trop court.", _scaffoldKey, context);
+                          return;
+                        }
+
+                        if(myEmailController.text.isEmpty){
+                          showInSnackBar("Entrez une adresse mail.", _scaffoldKey, context);
+                          return;
+                        }
+
+                        if(myTelephoneController.text.isEmpty){
+                          showInSnackBar("Entrez un n° téléphone.", _scaffoldKey, context);
+                          return;
+                        }
+
+                        if(myTelephoneController.text.length < 10){
+                          showInSnackBar("N° Téléphone trop court.", _scaffoldKey, context);
+                          return;
+                        }
+
+                        if(myTelephoneController.text.length > 10){
+                          showInSnackBar("N° Téléphone trop long.", _scaffoldKey, context);
+                          return;
+                        }
+
+                        if(myPasswordController.text.isEmpty){
+                          showInSnackBar("Mot de passe invalide", _scaffoldKey, context);
+                          return;
+                        }
+
+                        if(myPasswordController.text.length < 8){
+                          showInSnackBar("Mot de passe trop cour.", _scaffoldKey, context);
+                          return;
+                        }
+
+                        var uid = authentifications.SignUp(
+                            myEmailController.text,
+                            myPasswordController.text,
+                            myTelephoneController.text,
+                            myUserNameController.text,
+                            context, _scaffoldKey);
+                      }),
                     ),
 
                     SizedBox(height:10.0),
