@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:safetysecurity/View/Accueil.dart';
+import 'package:safetysecurity/View/ActivityPrincipale.dart';
 import 'package:safetysecurity/View/Connexion.dart';
 import 'package:safetysecurity/globalsVariables.dart';
 import 'package:safetysecurity/main.dart';
@@ -23,7 +23,6 @@ class Authentifications {
             return HomeScreen();
           })
       );
-
       return user.uid;
     } catch (exception) {
       if(exception.code =="wrong-password"){
