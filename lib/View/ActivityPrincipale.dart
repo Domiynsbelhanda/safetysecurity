@@ -1,10 +1,13 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:safetysecurity/Controller/Authentification.dart';
 import 'package:safetysecurity/globalsVariables.dart';
 
 import 'Page/HomePage.dart';
+import '../Model/Articles.dart';
+import '../Model/Users.dart';
 
 class HomeScreen extends StatefulWidget{
   @override
@@ -97,4 +100,77 @@ class _HomeScreen extends State<HomeScreen>{
     HomePage(),
     HomePage(),
   ];
+
+  @override
+  void initState() {
+    articles = [];
+
+    Query collectionReference1 = FirebaseFirestore.instance
+        .collection("Articles")
+        .orderBy('timestamp', descending: true);
+
+
+    collectionReference1
+        .snapshots()
+        .listen((data) => data.docs.forEach((doc) {
+
+      articles.add(
+          new Articles(
+            titre: doc.get('titre'),
+            description: doc.get("description"),
+            id: doc.get('id'),
+            date: doc.get('date'),
+            image: doc.get('image'),
+            timestamp: doc.get('timestamp'),
+            like: doc.get('like'),
+            comment: doc.get('comment'),
+            uid: doc.id
+          )
+      );
+    })
+    );
+
+    users = [];
+
+    Query collectionReference = FirebaseFirestore.instance
+        .collection("Users")
+        .orderBy('name', descending: true);
+
+
+    collectionReference
+        .snapshots()
+        .listen((data) => data.docs.forEach((doc) {
+
+      users.add(
+          new Users(
+              key: doc.get('key'),
+              name: doc.get("name"),
+              email: doc.get('email'),
+              image: doc.get('image'),
+              password: doc.get('password'),
+              telephone: doc.get('telephone'),
+              id: doc.id,
+          )
+      );
+    })
+    );
+
+    String userid = currentFirebaseUser.uid;
+
+    FirebaseFirestore.instance.collection('Users').doc('${userid}').snapshots()
+        .forEach((element) {
+      setState(() {
+        currentUsers = Users(
+            key: element.data()['key'],
+            email: element.data()['email'],
+            image: element.data()['image'],
+            name: element.data()['name'],
+            telephone: element.data()['telephone'],
+            password: element.data()['password'],
+            id: element.id
+        );
+      });
+    });
+    super.initState();
+  }
 }

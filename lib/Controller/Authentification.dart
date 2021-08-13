@@ -54,6 +54,7 @@ class Authentifications {
         "email": email,
         "password": password,
         "telephone": telephone,
+        "image": 'https://via.placeholder.com/150',
         "name": name,};
 
       final FirebaseFirestore _firestore = FirebaseFirestore.instance;
