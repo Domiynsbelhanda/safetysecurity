@@ -230,12 +230,16 @@ class _HomePage extends State<HomePage>{
             Column(
               children: articles.map((item){
                   return Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 5.0),
                     child: Column(
                       children: [
                         utilisateurs(context, item.id, item),
-                        SizedBox(height: 10.0),
-                        itemArticle(context, _scaffoldKey, item)
+                        SizedBox(height: 5.0),
+                        itemArticle(context, _scaffoldKey, item),
+                        SizedBox(height: 5.0),
+                        Divider(
+                          height: 20.0,
+                        )
                       ],
                     ),
                   );
