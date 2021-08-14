@@ -8,6 +8,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:safetysecurity/globalsVariables.dart';
 
+import 'ArticleItemDetails.dart';
+
 class HomePage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
@@ -235,7 +237,16 @@ class _HomePage extends State<HomePage>{
                       children: [
                         utilisateurs(context, item.id, item),
                         SizedBox(height: 5.0),
-                        itemArticle(context, _scaffoldKey, item),
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context){
+                                  return ItemDetails(comment: false, item: item,);
+                                })
+                            );
+                          },
+                            child: itemArticle(context, _scaffoldKey, item)),
                         SizedBox(height: 5.0),
                         Divider(
                           height: 20.0,

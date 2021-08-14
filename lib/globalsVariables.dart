@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:safetysecurity/View/Page/ArticleItemDetails.dart';
 
 import 'Controller/ProgressDialog.dart';
 import 'Model/Articles.dart';
+import 'Model/Commentaires.dart';
 import 'Model/Users.dart';
 
 double width(context) {
@@ -188,7 +190,12 @@ Widget itemArticle(context, _scaffoldKey, Articles item){
               Expanded(
                 child: GestureDetector(
                   onTap: (){
-                    showInSnackBar("Vous avez commenté", _scaffoldKey, context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context){
+                          return ItemDetails(comment: true, item: item,);
+                        })
+                    );
                   },
                   child: Container(
                     height: double.infinity,
@@ -269,6 +276,33 @@ Widget utilisateurs(context, id, item){
           ],
         )
       ],
+    ),
+  );
+}
+
+Widget backButton(context){
+  return GestureDetector(
+    onTap: (){
+      Navigator.pop(context);
+    },
+    child: Container(
+      width: 45,
+      height: 45,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+              Radius.circular(15)
+          ),
+          border: Border.all(
+            color: Colors.grey[300],
+            width: 1,
+          )
+      ),
+      child: Icon(
+        Icons.keyboard_arrow_left,
+        color: Colors.black,
+        size: 28,
+      ),
     ),
   );
 }
