@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:safetysecurity/Controller/Authentification.dart';
+import 'package:safetysecurity/View/Page/UserProfil.dart';
 import 'package:safetysecurity/globalsVariables.dart';
 
 import 'Page/HomePage.dart';
@@ -97,7 +98,7 @@ class _HomeScreen extends State<HomeScreen>{
   List pages = [
     HomePage(),
     HomePage(),
-    HomePage(),
+    UserProfil(),
     HomePage(),
   ];
 
@@ -114,19 +115,21 @@ class _HomeScreen extends State<HomeScreen>{
         .snapshots()
         .listen((data) => data.docs.forEach((doc) {
 
-      articles.add(
-          new Articles(
-            titre: doc.get('titre'),
-            description: doc.get("description"),
-            id: doc.get('id'),
-            date: doc.get('date'),
-            image: doc.get('image'),
-            timestamp: doc.get('timestamp'),
-            like: doc.get('like'),
-            comment: doc.get('comment'),
-            uid: doc.id
-          )
-      );
+      setState((){
+        articles.add(
+            new Articles(
+                titre: doc.get('titre'),
+                description: doc.get("description"),
+                id: doc.get('id'),
+                date: doc.get('date'),
+                image: doc.get('image'),
+                timestamp: doc.get('timestamp'),
+                like: doc.get('like'),
+                comment: doc.get('comment'),
+                uid: doc.id
+            )
+        );
+      });
     })
     );
 
@@ -141,8 +144,9 @@ class _HomeScreen extends State<HomeScreen>{
         .snapshots()
         .listen((data) => data.docs.forEach((doc) {
 
-      users.add(
-          new Users(
+      setState((){
+        users.add(
+            new Users(
               key: doc.get('key'),
               name: doc.get("name"),
               email: doc.get('email'),
@@ -150,8 +154,9 @@ class _HomeScreen extends State<HomeScreen>{
               password: doc.get('password'),
               telephone: doc.get('telephone'),
               id: doc.id,
-          )
-      );
+            )
+        );
+      });
     })
     );
 
