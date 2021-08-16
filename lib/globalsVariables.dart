@@ -23,6 +23,7 @@ List<Articles> articles;
 List<Users> users;
 Users currentUsers;
 
+String apiKey = 'AIzaSyCXD9g7N4ntnTdM81_h9JpphvaMXtdFTmw';
 
 Widget entete(context) {
   return Container(

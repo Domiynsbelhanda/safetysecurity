@@ -5,6 +5,7 @@ import 'package:safetysecurity/Controller/Authentification.dart';
 import 'package:safetysecurity/View/Connexion.dart';
 
 import '../../globalsVariables.dart';
+import 'AddPlace.dart';
 
 class UserProfil extends StatefulWidget{
   @override
@@ -174,7 +175,14 @@ class _UserProfil extends State<UserProfil>{
 
                     Expanded(
                       child: GestureDetector(
-                        onTap: (){},
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context){
+                                return AddPlace();
+                              })
+                          );
+                        },
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(

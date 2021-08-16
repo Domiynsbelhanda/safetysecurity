@@ -15,7 +15,7 @@ class Authentification extends StatefulWidget{
 }
 
 class _Authentification extends State<Authentification>{
-  
+
   Authentifications authentifications = Authentifications();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -67,43 +67,43 @@ class _Authentification extends State<Authentification>{
                         controller: EmailController,
                         keyboardType: TextInputType.emailAddress,
                         style: TextStyle(
-                          fontSize: width(context) / 25
+                            fontSize: width(context) / 25
                         ),
                         decoration: InputDecoration(
-                          hintText: "Adresse Mail |",
-                          border: new OutlineInputBorder(
-                            borderSide: new BorderSide(color: Colors.brown)
-                          )
+                            hintText: "Adresse Mail |",
+                            border: new OutlineInputBorder(
+                                borderSide: new BorderSide(color: Colors.brown)
+                            )
                         ),
                       ),
                     ),
 
                     Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: TextField(
-                        focusNode: myPasswordFocus,
-                        controller: PassWordController,
-                        obscureText: _obscureTextLogin,
-                        style: TextStyle(
-                            fontSize: width(context) / 25
-                        ),
-                        decoration: InputDecoration(
+                        padding: const EdgeInsets.all(15.0),
+                        child: TextField(
+                          focusNode: myPasswordFocus,
+                          controller: PassWordController,
+                          obscureText: _obscureTextLogin,
+                          style: TextStyle(
+                              fontSize: width(context) / 25
+                          ),
+                          decoration: InputDecoration(
                             hintText: "Mot de passe |",
                             border: new OutlineInputBorder(
                                 borderSide: new BorderSide(color: Colors.brown)
                             ),
-                          suffixIcon: GestureDetector(
-                            onTap: _toggleLogin,
-                            child: Icon(
-                              _obscureTextLogin
-                                  ? FontAwesomeIcons.eyeSlash
-                                  : FontAwesomeIcons.eye,
-                              size: width(context) / 25,
-                              color: Colors.black,
+                            suffixIcon: GestureDetector(
+                              onTap: _toggleLogin,
+                              child: Icon(
+                                _obscureTextLogin
+                                    ? FontAwesomeIcons.eyeSlash
+                                    : FontAwesomeIcons.eye,
+                                size: width(context) / 25,
+                                color: Colors.black,
+                              ),
                             ),
-                        ),
-                      ),
-                    )
+                          ),
+                        )
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right:15.0, bottom: 15.0),
@@ -143,7 +143,7 @@ class _Authentification extends State<Authentification>{
                           showInSnackBar("Entrez un mot de passe", _scaffoldKey, context);
                           return;
                         }
-                        
+
                         authentifications.SignIn(
                             EmailController.text,
                             PassWordController.text, context, _scaffoldKey);

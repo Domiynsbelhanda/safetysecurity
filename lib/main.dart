@@ -35,18 +35,18 @@ class _MyApp extends State<MyApp>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
-      title: "Safety Security",
-      color: Colors.lightBlue,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        backgroundColor: Colors.white,
-        primaryColor: Colors.lightBlue,
-        accentColor: Colors.brown,
-        textTheme: GoogleFonts.robotoTextTheme(
-          Theme.of(context).textTheme,
+        title: "Safety Security",
+        color: Colors.lightBlue,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          backgroundColor: Colors.white,
+          primaryColor: Colors.lightBlue,
+          accentColor: Colors.brown,
+          textTheme: GoogleFonts.robotoTextTheme(
+            Theme.of(context).textTheme,
+          ),
         ),
-      ),
-      home: (currentFirebaseUser == null) ? Authentification() : HomeScreen()
+        home: (currentFirebaseUser == null) ? Authentification() : HomeScreen()
     );
   }
 
