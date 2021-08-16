@@ -6,6 +6,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:safetysecurity/Model/Articles.dart';
+import 'package:safetysecurity/Model/Users.dart';
+import 'package:safetysecurity/View/ActivityPrincipale.dart';
 import 'package:safetysecurity/globalsVariables.dart';
 
 import 'ArticleItemDetails.dart';
@@ -41,6 +44,83 @@ class _HomePage extends State<HomePage>{
 
     setState(() {
       sampleImage = tempImage.path;
+    });
+  }
+
+  @override
+  void initState() {
+    articles = [];
+
+    Query collectionReference1 = FirebaseFirestore.instance
+        .collection("Articles")
+        .orderBy('timestamp', descending: true);
+
+
+    collectionReference1
+        .snapshots()
+        .listen((data) => data.docs.forEach((doc) {
+
+      setState(() {
+        articles.add(
+            new Articles(
+                titre: doc.get('titre'),
+                description: doc.get("description"),
+                id: doc.get('id'),
+                date: doc.get('date'),
+                image: doc.get('image'),
+                timestamp: doc.get('timestamp'),
+                like: doc.get('like'),
+                comment: doc.get('comment'),
+                uid: doc.id
+            )
+        );
+      });
+    })
+    );
+
+    users = [];
+
+    Query collectionReference = FirebaseFirestore.instance
+        .collection("Users")
+        .orderBy('name', descending: true);
+
+
+    collectionReference
+        .snapshots()
+        .listen((data) => data.docs.forEach((doc) {
+
+      setState(() {
+        users.add(
+            new Users(
+              key: doc.get('key'),
+              name: doc.get("name"),
+              email: doc.get('email'),
+              image: doc.get('image'),
+              password: doc.get('password'),
+              telephone: doc.get('telephone'),
+              id: doc.id,
+            )
+        );
+      });
+    })
+    );
+
+    String userid = currentFirebaseUser.uid;
+
+    FirebaseFirestore.instance.collection('Users').doc('${userid}').snapshots()
+        .forEach((element) {
+
+      setState(() {
+        currentUsers = Users(
+            key: element.data()['key'],
+            email: element.data()['email'],
+            image: element.data()['image'],
+            name: element.data()['name'],
+            telephone: element.data()['telephone'],
+            password: element.data()['password'],
+            id: element.id
+        );
+      });
     });
   }
 
@@ -308,5 +388,7 @@ class _HomePage extends State<HomePage>{
     await
     _firestore.collection('Articles').add(data);
     showInSnackBar("publication effectuée.", _scaffoldKey, context);
+
+    readData();
   }
 }

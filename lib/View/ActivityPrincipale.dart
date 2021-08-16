@@ -104,78 +104,77 @@ class _HomeScreen extends State<HomeScreen>{
 
   @override
   void initState() {
-    articles = [];
-
-    Query collectionReference1 = FirebaseFirestore.instance
-        .collection("Articles")
-        .orderBy('timestamp', descending: true);
-
-
-    collectionReference1
-        .snapshots()
-        .listen((data) => data.docs.forEach((doc) {
-
-      setState((){
-        articles.add(
-            new Articles(
-                titre: doc.get('titre'),
-                description: doc.get("description"),
-                id: doc.get('id'),
-                date: doc.get('date'),
-                image: doc.get('image'),
-                timestamp: doc.get('timestamp'),
-                like: doc.get('like'),
-                comment: doc.get('comment'),
-                uid: doc.id
-            )
-        );
-      });
-    })
-    );
-
-    users = [];
-
-    Query collectionReference = FirebaseFirestore.instance
-        .collection("Users")
-        .orderBy('name', descending: true);
-
-
-    collectionReference
-        .snapshots()
-        .listen((data) => data.docs.forEach((doc) {
-
-      setState((){
-        users.add(
-            new Users(
-              key: doc.get('key'),
-              name: doc.get("name"),
-              email: doc.get('email'),
-              image: doc.get('image'),
-              password: doc.get('password'),
-              telephone: doc.get('telephone'),
-              id: doc.id,
-            )
-        );
-      });
-    })
-    );
-
-    String userid = currentFirebaseUser.uid;
-
-    FirebaseFirestore.instance.collection('Users').doc('${userid}').snapshots()
-        .forEach((element) {
-      setState(() {
-        currentUsers = Users(
-            key: element.data()['key'],
-            email: element.data()['email'],
-            image: element.data()['image'],
-            name: element.data()['name'],
-            telephone: element.data()['telephone'],
-            password: element.data()['password'],
-            id: element.id
-        );
-      });
-    });
+    readData();
     super.initState();
   }
+}
+
+readData() {
+  articles = [];
+
+  Query collectionReference1 = FirebaseFirestore.instance
+      .collection("Articles")
+      .orderBy('timestamp', descending: true);
+
+
+  collectionReference1
+      .snapshots()
+      .listen((data) => data.docs.forEach((doc) {
+
+      articles.add(
+          new Articles(
+              titre: doc.get('titre'),
+              description: doc.get("description"),
+              id: doc.get('id'),
+              date: doc.get('date'),
+              image: doc.get('image'),
+              timestamp: doc.get('timestamp'),
+              like: doc.get('like'),
+              comment: doc.get('comment'),
+              uid: doc.id
+          )
+      );
+    })
+  );
+
+  users = [];
+
+  Query collectionReference = FirebaseFirestore.instance
+      .collection("Users")
+      .orderBy('name', descending: true);
+
+
+  collectionReference
+      .snapshots()
+      .listen((data) => data.docs.forEach((doc) {
+
+      users.add(
+          new Users(
+            key: doc.get('key'),
+            name: doc.get("name"),
+            email: doc.get('email'),
+            image: doc.get('image'),
+            password: doc.get('password'),
+            telephone: doc.get('telephone'),
+            id: doc.id,
+          )
+      );
+  })
+  );
+
+  String userid = currentFirebaseUser.uid;
+
+  FirebaseFirestore.instance.collection('Users').doc('${userid}').snapshots()
+      .forEach((element) {
+
+      currentUsers = Users(
+          key: element.data()['key'],
+          email: element.data()['email'],
+          image: element.data()['image'],
+          name: element.data()['name'],
+          telephone: element.data()['telephone'],
+          password: element.data()['password'],
+          id: element.id
+      );
+    });
 }

@@ -1,4 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:safetysecurity/Controller/Authentification.dart';
+import 'package:safetysecurity/View/Connexion.dart';
 
 import '../../globalsVariables.dart';
 
@@ -11,12 +15,16 @@ class UserProfil extends StatefulWidget{
 }
 
 class _UserProfil extends State<UserProfil>{
+
+  Authentifications authentifications = new Authentifications();
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Stack(
               children: [
@@ -80,6 +88,41 @@ class _UserProfil extends State<UserProfil>{
 
                         Divider(
                           height: 5.0
+                        ),
+
+                        Align(
+                          alignment: FractionalOffset.bottomCenter,
+                          child: Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: GestureDetector(
+                              onTap: (){
+
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                height: width(context) / 10,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xff99c0e1),
+                                ),
+                                child: Center(
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        FontAwesomeIcons.penSquare,
+                                        color: const Color(0xff444d5e),
+                                        size: width(context) / 15,
+                                      ),
+                                      Text(
+                                          '  MODIFIER'
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         )
                       ],
                     ),
@@ -105,7 +148,23 @@ class _UserProfil extends State<UserProfil>{
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: Colors.black12
+                            color: const Color(0xff99c0e1),
+                          ),
+                          child: Center(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.users,
+                                  color: const Color(0xff444d5e),
+                                  size: width(context) / 15,
+                                ),
+                                Text(
+                                    '  Vos Proches'
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -119,7 +178,23 @@ class _UserProfil extends State<UserProfil>{
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                              color: Colors.black12
+                            color: const Color(0xff99c0e1),
+                          ),
+                          child: Center(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.placeOfWorship,
+                                  color: const Color(0xff444d5e),
+                                  size: width(context) / 15,
+                                ),
+                                Text(
+                                    '  Vos Lieux'
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -127,8 +202,118 @@ class _UserProfil extends State<UserProfil>{
                   ],
                 ),
               ),
-            )
+            ),
 
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: width(context) / 10,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: (){},
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: const Color(0xff99c0e1),
+                          ),
+                          child: Center(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.exclamationTriangle,
+                                  color: const Color(0xff444d5e),
+                                  size: width(context) / 15,
+                                ),
+                                Text(
+                                    '  Vos Alertes'
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(width: 10.0),
+
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: (){},
+                        child: Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: const Color(0xff99c0e1),
+                          ),
+                          child: Center(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.bookReader,
+                                  color: const Color(0xff444d5e),
+                                  size: width(context) / 15,
+                                ),
+                                Text(
+                                    '  Vos Publications'
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: GestureDetector(
+                onTap: (){
+                  authentifications.signOut(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context){
+                        return Authentification();
+                      })
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: width(context) / 10,
+                  decoration: BoxDecoration(
+                    color: const Color(0xff99c0e1),
+                  ),
+                  child: Center(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          FontAwesomeIcons.signOutAlt,
+                          color: const Color(0xff444d5e),
+                          size: width(context) / 15,
+                        ),
+                        Text(
+                            '  Deconnexion'
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            SizedBox(height: 20.0)
           ],
         ),
       ),

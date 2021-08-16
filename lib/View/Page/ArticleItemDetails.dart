@@ -6,6 +6,8 @@ import 'package:safetysecurity/Model/Commentaires.dart';
 import 'package:safetysecurity/Model/Users.dart';
 import 'package:safetysecurity/globalsVariables.dart';
 
+import '../ActivityPrincipale.dart';
+
 class ItemDetails extends StatefulWidget{
 
   bool comment;
@@ -129,6 +131,8 @@ class _ItemDetails extends State<ItemDetails>{
                     comment = !comment;
                     myCommentController.clear();
                   });
+
+                  readData();
 
                 })
           ],
