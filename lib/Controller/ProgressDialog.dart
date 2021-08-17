@@ -9,15 +9,15 @@ class ProgressDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0)
+          borderRadius: BorderRadius.circular(10.0)
       ),
       backgroundColor: Colors.transparent,
       child: Container(
         margin: EdgeInsets.all(16.0),
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(4)
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(4)
         ),
         child: Padding(
           padding: EdgeInsets.all(16),

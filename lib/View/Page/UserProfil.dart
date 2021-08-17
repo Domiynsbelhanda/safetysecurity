@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:safetysecurity/Controller/Authentification.dart';
 import 'package:safetysecurity/View/Connexion.dart';
+import 'package:safetysecurity/View/Page/YourPublication.dart';
 
 import '../../globalsVariables.dart';
 import 'AddPlace.dart';
@@ -253,7 +254,14 @@ class _UserProfil extends State<UserProfil>{
 
                     Expanded(
                       child: GestureDetector(
-                        onTap: (){},
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context){
+                                return YourPublication();
+                              })
+                          );
+                        },
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
