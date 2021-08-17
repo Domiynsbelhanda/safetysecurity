@@ -309,7 +309,6 @@ class _AddPlace extends State<AddPlace>{
                   .collection('lieux')
                   .doc(lieu.id).delete();
               showInSnackBar('delete pressed', _scaffoldKey, context);
-              Navigator.pop(context, true);
             });
           },
         ),

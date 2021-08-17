@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:safetysecurity/Model/Articles.dart';
 import 'package:safetysecurity/globalsVariables.dart';
@@ -77,7 +78,13 @@ class _YourPublication extends State<YourPublication>{
 
                           TextButton(
                             onPressed: (){
-
+                              showInSnackBar("ok", _scaffoldKey, context);
+                              setState(() {
+                                FirebaseFirestore.instance
+                                    .collection("Articles").doc(e.uid)
+                                    .delete();
+                                showInSnackBar('delete pressed', _scaffoldKey, context);
+                              });
                             },
                             child: Container(
                               height: width(context) / 10,
