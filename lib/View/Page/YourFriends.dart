@@ -38,8 +38,19 @@ class _YourFriends extends State<YourFriends>{
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
+              Center(
+                child: Text(
+                  'VOS AMIS',
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: width(context) / 15,
+                    letterSpacing: 2,
+                  ),
+                  textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
+                ),
+              ),
             ],
           ),
         ),
