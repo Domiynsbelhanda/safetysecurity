@@ -28,40 +28,45 @@ class _YourPublication extends State<YourPublication>{
     // TODO: implement build
     return Scaffold(
       key: _scaffoldKey,
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        leading: Padding(
+            padding: const EdgeInsets.all(10.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              backButton(context),
+            ],
+          ),
+        ),
+        title: Text(
+          'SAFETY SECURITY',
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            fontSize: width(context) / 15,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  backButton(context),
 
-                  SizedBox(width: 15.0,),
-
-                  Text(
-                    'SAFETY SECURITY',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: width(context) / 15,
-                      fontWeight: FontWeight.w700,
-                    ),
+              Center(
+                child: Text(
+                  'VOS PUBLICATIONS',
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: width(context) / 15,
+                    letterSpacing: 2,
                   ),
-                ],
-              ),
-
-              SizedBox(height: 20.0),
-
-              Text(
-                'VOS PUBLICATIONS',
-                style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: width(context) / 15,
-                  letterSpacing: 2,
+                  textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
                 ),
-                textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
               ),
 
               SizedBox(height: 10.0),

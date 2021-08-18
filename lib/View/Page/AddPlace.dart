@@ -69,32 +69,34 @@ class _AddPlace extends State<AddPlace>{
     // TODO: implement build
     return Scaffold(
       key: _scaffoldKey,
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        leading: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              backButton(context),
+
+            ],
+          ),
+        ),
+        title: Text(
+          'SAFETY SECURITY',
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            fontSize: width(context) / 15,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  backButton(context),
-
-                  SizedBox(width: 15.0),
-
-                  Text(
-                    'SAFETY SECURITY',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: width(context) / 15,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
-              ),
-
-
-              SizedBox(height: 20.0),
 
               Text(
                 'AJOUT D\'UN LIEU',

@@ -287,8 +287,6 @@ Widget backButton(context){
       Navigator.pop(context);
     },
     child: Container(
-      width: 45,
-      height: 45,
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
