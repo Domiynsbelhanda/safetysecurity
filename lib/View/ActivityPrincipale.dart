@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:safetysecurity/Controller/Authentification.dart';
+import 'package:safetysecurity/Model/Amis.dart';
 import 'package:safetysecurity/Model/Invitation.dart';
 import 'package:safetysecurity/View/Page/Parametres.dart';
 import 'package:safetysecurity/View/Page/UserProfil.dart';
@@ -203,4 +204,25 @@ readData() {
       );
     })
   );
+
+  amis = [];
+
+  Query collectionReferences = FirebaseFirestore.instance
+        .collection("Users").doc(currentFirebaseUser.uid)
+        .collection('amis')
+        .orderBy('id', descending: true);
+
+
+    collectionReferences
+        .snapshots()
+        .listen((data) { data.docs.forEach((doc) {
+        amis.add(
+            new Amis(
+              uid: doc.id,
+              id: doc.get('id'),
+            )
+      );
+    });
+    }
+    );
 }

@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:safetysecurity/Model/Amis.dart';
 import 'package:safetysecurity/Model/Articles.dart';
 import 'package:safetysecurity/Model/Invitation.dart';
 import 'package:safetysecurity/Model/Users.dart';
@@ -124,7 +125,6 @@ class _HomePage extends State<HomePage>{
       });
     });
     invitations = [];
-    invitations.clear();
 
   Query collectionReference2 = FirebaseFirestore.instance
       .collection("Invitations")
@@ -150,6 +150,29 @@ class _HomePage extends State<HomePage>{
       });
     })
   );
+
+    Query collectionReferences = FirebaseFirestore.instance
+        .collection("Users").doc(currentFirebaseUser.uid)
+        .collection('amis')
+        .orderBy('id', descending: true);
+
+    amis = [];
+
+    collectionReferences
+        .snapshots()
+        .listen((data) { data.docs.forEach((doc) {
+
+      setState(() {
+        amis.add(
+            new Amis(
+              uid: doc.id,
+              id: doc.get('id'),
+            )
+        );
+      });
+    });
+    }
+    );
   }
 
   @override

@@ -144,7 +144,11 @@ class Recherche extends SearchDelegate{
                                   showInSnackBar('invitation annulée', _scaffoldKey, context);
                                   readData();
                                   Navigator.pop(context);
-                                } else {
+                                } else if (amis.any((element) => element.id.contains(e.id))){
+                                  showInSnackBar('Est votre amis', _scaffoldKey, context);
+                                  Navigator.pop(context);
+                                } 
+                                else {
                                   var invitation = {
                                   'expeditaire': currentFirebaseUser.uid,
                                   'destinataire': e.id,
@@ -170,6 +174,8 @@ class Recherche extends SearchDelegate{
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),
                                   child: Text(
+                                    amis.any((element) => element.id.contains(e.id)) ?
+                                    'Est votre amis' :
                                     invitations.any((item) => item.destinataire.contains(e.id)) ?
                                     'Annuler la demande' : 'Envoyez une relation',
                                     style: TextStyle(

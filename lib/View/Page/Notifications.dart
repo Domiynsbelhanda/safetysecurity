@@ -148,7 +148,8 @@ class _Notifications extends State<Notifications>{
                           await
                           _firestore.collection('Users')
                               .doc(currentFirebaseUser.uid)
-                              .collection('amis').add(data);
+                              .collection('amis').doc(item.expeditaire)
+                              .set(data);
                           
                           var datas = {
                             'id': currentFirebaseUser.uid,
@@ -157,7 +158,8 @@ class _Notifications extends State<Notifications>{
                           await
                           _firestore.collection('Users')
                               .doc(item.expeditaire)
-                              .collection('amis').add(datas);
+                              .collection('amis').doc(currentFirebaseUser.uid)
+                              .set(datas);
                           
                           await
                                 _firestore.collection('Invitations')

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:safetysecurity/Model/Amis.dart';
 import 'package:safetysecurity/Model/Invitation.dart';
 import 'package:safetysecurity/View/Page/ArticleItemDetails.dart';
 
@@ -23,7 +24,8 @@ User currentFirebaseUser;
 List<Articles> articles;
 List<Users> users;
 Users currentUsers;
-List<Invitation> invitations = [];
+List<Invitation> invitations;
+List<Amis> amis;
 
 String apiKey = 'AIzaSyCXD9g7N4ntnTdM81_h9JpphvaMXtdFTmw';
 
