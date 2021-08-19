@@ -131,9 +131,6 @@ class _ItemDetails extends State<ItemDetails>{
                     comment = !comment;
                     myCommentController.clear();
                   });
-
-                  readData();
-
                 })
           ],
         ),

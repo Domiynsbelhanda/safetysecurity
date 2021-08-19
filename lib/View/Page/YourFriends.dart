@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:safetysecurity/Controller/Recherche.dart';
 import 'package:safetysecurity/globalsVariables.dart';
 
 class YourFriends extends StatefulWidget{
@@ -10,10 +11,14 @@ class YourFriends extends StatefulWidget{
 }
 
 class _YourFriends extends State<YourFriends>{
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Colors.white,
@@ -51,6 +56,16 @@ class _YourFriends extends State<YourFriends>{
                   textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
                 ),
               ),
+
+              SizedBox(height: 10.0),
+
+              Center(child: button('AJOUTER', context, (){
+                showSearch(
+                  context: context,
+                  delegate: Recherche(_scaffoldKey),
+                );
+              }))
+              
             ],
           ),
         ),
