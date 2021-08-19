@@ -12,10 +12,13 @@ class Authentifications {
 
   Future<String> SignIn(String email, String password, context, _scaffoldKey) async{
     try{
+
+      showDialogs('Veuillez patienter', context);
       User user = (await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password)).user;
       showInSnackBar("Connectée.", _scaffoldKey, context);
 
       currentFirebaseUser = user;
+      Navigator.pop(context);
 
       Navigator.push(
           context,
@@ -47,6 +50,8 @@ class Authentifications {
   Future<String> SignUp(String email, String password, String telephone, String name, context, _scaffoldKey) async{
     try{
 
+      showDialogs('Veuillez patienter', context);
+
       User user = (await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password)).user;
 
       var data={
@@ -63,6 +68,8 @@ class Authentifications {
       showInSnackBar("Inscription effectuée.", _scaffoldKey, context);
 
       currentFirebaseUser = user;
+
+      Navigator.pop(context);
 
       Navigator.push(
           context,

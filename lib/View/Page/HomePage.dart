@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:safetysecurity/Model/Articles.dart';
+import 'package:safetysecurity/Model/Invitation.dart';
 import 'package:safetysecurity/Model/Users.dart';
 import 'package:safetysecurity/View/ActivityPrincipale.dart';
 import 'package:safetysecurity/globalsVariables.dart';
@@ -122,6 +123,33 @@ class _HomePage extends State<HomePage>{
         );
       });
     });
+    invitations = [];
+    invitations.clear();
+
+  Query collectionReference2 = FirebaseFirestore.instance
+      .collection("Invitations")
+      .orderBy('timestamp', descending: true);
+
+
+  collectionReference2
+      .snapshots()
+      .listen((data) => data.docs.forEach((doc) {
+
+      setState((){
+        invitations.add(
+          new Invitation(
+              destinataire: doc.get('destinataire'),
+              expeditaire: doc.get('expeditaire'),
+              vu: doc.get('vu'),
+              accepte: doc.get('accepte'),
+              refuse: doc.get('refuse'),
+              timestamp: doc.get('timestamp'),
+              uid: doc.id
+          )
+      );
+      });
+    })
+  );
   }
 
   @override

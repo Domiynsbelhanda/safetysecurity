@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safetysecurity/Model/Invitation.dart';
 import 'package:safetysecurity/Model/Users.dart';
+import 'package:safetysecurity/View/ActivityPrincipale.dart';
 import 'package:safetysecurity/globalsVariables.dart';
 
 class Recherche extends SearchDelegate{
@@ -73,6 +74,9 @@ class Recherche extends SearchDelegate{
     final ids = liste.map((e) => e.id).toSet();
     liste.retainWhere((x) => ids.remove(x.id));
 
+    final invitids = invitations.map((e) => e.uid).toSet();
+    invitations.retainWhere((x) => invitids.remove(x.uid));
+
     // TODO: implement buildResults
     return SingleChildScrollView(
       child: Padding(
@@ -129,20 +133,34 @@ class Recherche extends SearchDelegate{
                   Expanded(
                     child: GestureDetector(
                               onTap: () async{
-                                var invitation = {
+
+                                if (invitations.any((item) => item.destinataire.contains(e.id))){
+                                  List<Invitation> invit = 
+                                  invitations.where((element) => element.destinataire.contains(e.id)).toList();
+                                  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+                                await
+                                _firestore.collection('Invitations')
+                                    .doc(invit.first.uid).delete();
+                                  showInSnackBar('invitation annulée', _scaffoldKey, context);
+                                  readData();
+                                  Navigator.pop(context);
+                                } else {
+                                  var invitation = {
                                   'expeditaire': currentFirebaseUser.uid,
                                   'destinataire': e.id,
                                   'timestamp': FieldValue.serverTimestamp(),
                                   'vu': false,
-                                  'accepte': null,
-                                  'refuse': null
+                                  'accepte': false,
+                                  'refuse': true
                                 };
                                 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
                                 await
                                 _firestore.collection('Invitations')
                                     .add(invitation);
                                 showInSnackBar('Vous avez envoyé une demande', _scaffoldKey, context);
+                                readData();
                                 Navigator.pop(context);
+                                }
                               }, 
                               child: Container(
                                 decoration: BoxDecoration(
@@ -152,7 +170,8 @@ class Recherche extends SearchDelegate{
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),
                                   child: Text(
-                                    'Envoyez une relation',
+                                    invitations.any((item) => item.destinataire.contains(e.id)) ?
+                                    'Annuler la demande' : 'Envoyez une relation',
                                     style: TextStyle(
                                       color: Colors.blue
                                     ),

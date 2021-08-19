@@ -1,0 +1,218 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:safetysecurity/Model/Invitation.dart';
+import 'package:safetysecurity/Model/Users.dart';
+
+import '../../globalsVariables.dart';
+import '../ActivityPrincipale.dart';
+
+class Notifications extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _Notifications();
+  }
+}
+
+class _Notifications extends State<Notifications>{
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  List<Invitation> invit;
+
+  @override
+  void initState() {
+    invit = invitations.where((element) => element.destinataire.contains(currentFirebaseUser.uid)).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        leading: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              backButton(context),
+            ],
+          ),
+        ),
+        title: Text(
+          'SAFETY SECURITY',
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            fontSize: width(context) / 15,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 10.0,),
+            invit.length == 0 ? 
+            Center(child: Text('Vous avez aucune notification')) : 
+            Center(child: Text('Vos notifications :')),
+
+            SizedBox(height: 5.0,), 
+
+            Column(
+              children: invit.map((e) {
+                return invitation(e);
+              }).toList(),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget invitation(Invitation item){
+    List<Users> us = users.where((element) => element.id.contains(item.expeditaire)).toList();
+    Users itemUser = us.first;
+    return Padding(
+      padding: EdgeInsets.all(10.0),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: const Color(0xffe3f2fd),
+          borderRadius: BorderRadius.circular(5.0)
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Text(
+                'Vous avez une invitation de : '
+              ),
+
+              SizedBox(height: 3.0),
+
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: width(context) / 10,
+                    child: CircleAvatar(
+                      radius: 30.0,
+                      backgroundImage:
+                      NetworkImage('${itemUser.image}'),
+                      backgroundColor: Colors.transparent,
+                    ),
+                  ),
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${itemUser.name}',
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+
+                      Text(
+                        '${itemUser.email}',
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: width(context) / 30,
+                          fontStyle: FontStyle.italic,
+                        ),
+                        textAlign: TextAlign.left,
+                      )
+                    ],
+                  ),
+                ],
+              ),
+
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: Container(
+                      child: TextButton(
+                        onPressed: () async{
+
+                          var data = {
+                            'id': item.expeditaire,
+                          };
+
+                          final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+                          await
+                          _firestore.collection('Users')
+                              .doc(currentFirebaseUser.uid)
+                              .collection('amis').add(data);
+                          
+                          var datas = {
+                            'id': currentFirebaseUser.uid,
+                          };
+
+                          await
+                          _firestore.collection('Users')
+                              .doc(item.expeditaire)
+                              .collection('amis').add(datas);
+                          
+                          await
+                                _firestore.collection('Invitations')
+                                    .doc(item.uid).delete();
+
+                          readData();
+
+                          setState(() {
+                            invit = invitations;
+                          });
+                          showInSnackBar('Invitation acceptée', _scaffoldKey, context);
+                        }, 
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xffe3f2fd),
+                          ),
+                          child: Text(
+                            'ACCEPTER'
+                          ),
+                        )
+                      ),
+                    ),
+                  ),
+
+                  Expanded(
+                    child: Container(
+                      child: TextButton(
+                        onPressed: () async{
+                          final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+                                await
+                                _firestore.collection('Invitations')
+                                    .doc(item.uid).delete();
+                          showInSnackBar('Invitation refusée', _scaffoldKey, context);
+                          readData();
+                          setState(() {
+                            invit = invitations;
+                          });
+                        }, 
+                        child: Container(
+                          child: Text(
+                            'REFUSER',
+                            style: TextStyle(
+                              color: const Color(0xffbf360c)
+                            ),
+                          ),
+                        )
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

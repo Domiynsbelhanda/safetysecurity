@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:safetysecurity/Controller/Authentification.dart';
+import 'package:safetysecurity/Model/Invitation.dart';
+import 'package:safetysecurity/View/Page/Parametres.dart';
 import 'package:safetysecurity/View/Page/UserProfil.dart';
 import 'package:safetysecurity/globalsVariables.dart';
 
@@ -99,12 +101,11 @@ class _HomeScreen extends State<HomeScreen>{
     HomePage(),
     HomePage(),
     UserProfil(),
-    HomePage(),
+    About(),
   ];
 
   @override
   void initState() {
-    readData();
     super.initState();
   }
 }
@@ -177,4 +178,29 @@ readData() {
           id: element.id
       );
     });
+
+    invitations = [];
+
+  Query collectionReference2 = FirebaseFirestore.instance
+      .collection("Invitations")
+      .orderBy('timestamp', descending: true);
+
+
+  collectionReference2
+      .snapshots()
+      .listen((data) => data.docs.forEach((doc) {
+
+      invitations.add(
+          new Invitation(
+              destinataire: doc.get('destinataire'),
+              expeditaire: doc.get("expeditaire"),
+              vu: doc.get('vu'),
+              accepte: doc.get('accepte'),
+              refuse: doc.get('refuse'),
+              timestamp: doc.get('timestamp'),
+              uid: doc.id
+          )
+      );
+    })
+  );
 }

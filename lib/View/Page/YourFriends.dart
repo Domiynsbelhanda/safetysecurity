@@ -64,7 +64,9 @@ class _YourFriends extends State<YourFriends>{
                   context: context,
                   delegate: Recherche(_scaffoldKey),
                 );
-              }))
+              })),
+
+              Divider(height: 5.0)
               
             ],
           ),
