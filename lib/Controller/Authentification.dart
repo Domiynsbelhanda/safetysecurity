@@ -30,19 +30,25 @@ class Authentifications {
     } catch (exception) {
       if(exception.code =="wrong-password"){
         showInSnackBar("Mot de passe incorrect.", _scaffoldKey, context);
+        Navigator.pop(context);
       }
       else if(exception.code =="user-not-found"){
         showInSnackBar("Vous n'avez pas de compte.", _scaffoldKey, context);
+        Navigator.pop(context);
       }
       else if (exception.code =="user-disabled"){
         showInSnackBar("Compte desactivé par l'admin", _scaffoldKey, context);
+        Navigator.pop(context);
       } else if (exception.code =="invalid-email"){
         showInSnackBar("Adresse mail invalide.", _scaffoldKey, context);
+        Navigator.pop(context);
       } else if (exception.code =="too-many-requests"){
         showInSnackBar("Erreur, compte deja connecté", _scaffoldKey, context);
+        Navigator.pop(context);
       }
       else {
         showInSnackBar(exception.code, _scaffoldKey, context);
+        Navigator.pop(context);
       }
     }
   }
@@ -83,8 +89,10 @@ class Authentifications {
     } catch (exception) {
       if (exception.code == "email-already-in-use") {
         showInSnackBar("Adresse mail déjà utilisée.", _scaffoldKey, context);
+        Navigator.pop(context);
       } else {
         showInSnackBar(exception.code, _scaffoldKey, context);
+        Navigator.pop(context);
       }
     }
 

@@ -9,6 +9,7 @@ import 'package:safetysecurity/View/Page/Parametres.dart';
 import 'package:safetysecurity/View/Page/UserProfil.dart';
 import 'package:safetysecurity/globalsVariables.dart';
 
+import 'Page/Alerter.dart';
 import 'Page/HomePage.dart';
 import '../Model/Articles.dart';
 import '../Model/Users.dart';
@@ -100,7 +101,7 @@ class _HomeScreen extends State<HomeScreen>{
 
   List pages = [
     HomePage(),
-    HomePage(),
+    Alerter(),
     UserProfil(),
     About(),
   ];

@@ -5,6 +5,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:safetysecurity/Model/Amis.dart';
 import 'package:safetysecurity/Model/Articles.dart';
@@ -49,8 +50,14 @@ class _HomePage extends State<HomePage>{
     });
   }
 
+  getPosition() async {
+    position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  }
+
   @override
   void initState() {
+    getPosition();
+
     articles = [];
 
     Query collectionReference1 = FirebaseFirestore.instance
