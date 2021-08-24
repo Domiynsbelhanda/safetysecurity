@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:safetysecurity/Model/Alerte.dart';
 import 'package:safetysecurity/Model/Amis.dart';
 import 'package:safetysecurity/Model/Invitation.dart';
 import 'package:safetysecurity/View/Page/ArticleItemDetails.dart';
@@ -27,6 +28,7 @@ List<Users> users;
 Users currentUsers;
 List<Invitation> invitations;
 List<Amis> amis;
+List<Alerte> alertes;
 
 String apiKey = 'AIzaSyCXD9g7N4ntnTdM81_h9JpphvaMXtdFTmw';
 

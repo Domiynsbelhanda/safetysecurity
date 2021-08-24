@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:safetysecurity/Model/Alerte.dart';
 import 'package:safetysecurity/Model/Amis.dart';
 import 'package:safetysecurity/Model/Articles.dart';
 import 'package:safetysecurity/Model/Invitation.dart';
@@ -174,6 +175,33 @@ class _HomePage extends State<HomePage>{
             new Amis(
               uid: doc.id,
               id: doc.get('id'),
+            )
+        );
+      });
+    });
+    }
+    );
+
+
+    Query collectionReferenc = FirebaseFirestore.instance
+        .collection("Users").doc(currentFirebaseUser.uid)
+        .collection('alertes')
+        .orderBy('timestamp', descending: true);
+
+    alertes = [];
+
+    collectionReferenc
+        .snapshots()
+        .listen((data) { data.docs.forEach((doc) {
+      setState(() {
+        alertes.add(
+            new Alerte(
+              id: doc.id,
+              timestamp: doc.get('timestamp'),
+              de: doc.get('de'),
+              latitude: doc.get('latitude'),
+              longitude: doc.get('longitude'),
+              vue: doc.get('vue')
             )
         );
       });
@@ -446,7 +474,5 @@ class _HomePage extends State<HomePage>{
     await
     _firestore.collection('Articles').add(data);
     showInSnackBar("publication effectuée.", _scaffoldKey, context);
-
-    readData();
   }
 }

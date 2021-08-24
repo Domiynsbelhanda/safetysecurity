@@ -152,7 +152,6 @@ class _YourFriends extends State<YourFriends>{
                   .collection('amis')
                   .doc(currentFirebaseUser.uid).delete();
               showInSnackBar('delete pressed', _scaffoldKey, context);
-              readData();
 
             Navigator.pop(context);
           },

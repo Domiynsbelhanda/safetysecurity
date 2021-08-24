@@ -142,7 +142,6 @@ class Recherche extends SearchDelegate{
                                 _firestore.collection('Invitations')
                                     .doc(invit.first.uid).delete();
                                   showInSnackBar('invitation annulée', _scaffoldKey, context);
-                                  readData();
                                   Navigator.pop(context);
                                 } else if (amis.any((element) => element.id.contains(e.id))){
                                   showInSnackBar('Est votre amis', _scaffoldKey, context);
@@ -162,7 +161,6 @@ class Recherche extends SearchDelegate{
                                 _firestore.collection('Invitations')
                                     .add(invitation);
                                 showInSnackBar('Vous avez envoyé une demande', _scaffoldKey, context);
-                                readData();
                                 Navigator.pop(context);
                                 }
                               }, 
