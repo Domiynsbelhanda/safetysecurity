@@ -295,14 +295,7 @@ class _Notifications extends State<Notifications>{
                     child: Container(
                       child: TextButton(
                         onPressed: () async{
-
-                          final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-                                await
-                                _firestore.collection('Users')
-                                    .doc(currentFirebaseUser.uid)
-                                    .collection('alertes')
-                                    .doc(item.id)
-                                    .update({'vue': true});
+                          
                           showInSnackBar('Alertes vue', _scaffoldKey, context);
 
                           Navigator.push(
