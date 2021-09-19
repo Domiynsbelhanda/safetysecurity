@@ -46,11 +46,11 @@ class _MyApp extends State<MyApp>{
     // TODO: implement build
     return MaterialApp(
         title: "Safety Security",
-        color: Colors.lightBlue,
+        color: const Color(0xff0040ff),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           backgroundColor: Colors.white,
-          primaryColor: Colors.lightBlue,
+          primaryColor: const Color(0xff0040ff),
           accentColor: Colors.brown,
           textTheme: GoogleFonts.robotoTextTheme(
             Theme.of(context).textTheme,

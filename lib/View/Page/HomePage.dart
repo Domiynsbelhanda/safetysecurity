@@ -219,8 +219,6 @@ class _HomePage extends State<HomePage>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            entete(context),
-
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
@@ -323,7 +321,7 @@ class _HomePage extends State<HomePage>{
                             child: Container(
                               height: double.infinity,
                               decoration: BoxDecoration(
-                                color: const Color(0xff99c0e1),
+                                color: const Color(0xff0040ff),
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               child: Center(
@@ -333,12 +331,16 @@ class _HomePage extends State<HomePage>{
                                   children: [
                                     Icon(
                                       FontAwesomeIcons.image,
-                                      color: const Color(0xff444d5e),
+                                      color: Colors.white,
                                       size: width(context) / 15,
                                     ),
                                     Text(
                                       sampleImage == null ?
-                                      '  Image' : '   Image ${'ok'}'
+                                      '  Image' : '   Image ${'ok'}',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold
+                                      ),
                                     )
                                   ],
                                 ),
@@ -349,13 +351,15 @@ class _HomePage extends State<HomePage>{
 
                         SizedBox(width: 5.0),
 
+                        Divider(),
+
                         Expanded(
                           child: GestureDetector(
                             onTap: ()=> publierArticle(),
                             child: Container(
                               height: double.infinity,
                               decoration: BoxDecoration(
-                                color: const Color(0xff99c0e1),
+                                color: const Color(0xff0040ff),
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               child: Center(
@@ -364,7 +368,11 @@ class _HomePage extends State<HomePage>{
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                        'Publier'
+                                        'PUBLIER',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold
+                                      ),
                                     )
                                   ],
                                 ),
@@ -398,11 +406,16 @@ class _HomePage extends State<HomePage>{
             Column(
               children: articles.map((item){
                   return Padding(
-                    padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 5.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        utilisateurs(context, item.id, item),
-                        SizedBox(height: 5.0),
+                        Card(
+                          elevation: 2.0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: utilisateurs(context, item.id, item),
+                            )),
+                        SizedBox(height: 0.0),
                         GestureDetector(
                           onTap: (){
                             Navigator.push(
@@ -412,11 +425,12 @@ class _HomePage extends State<HomePage>{
                                 })
                             );
                           },
-                            child: itemArticle(context, _scaffoldKey, item)),
-                        SizedBox(height: 5.0),
-                        Divider(
-                          height: 20.0,
-                        )
+                            child: Card(
+                              elevation: 2.0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: itemArticle(context, _scaffoldKey, item),
+                                ))),
                       ],
                     ),
                   );

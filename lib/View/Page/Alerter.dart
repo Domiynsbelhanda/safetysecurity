@@ -67,7 +67,6 @@ class _Alerter extends State<Alerter>{
       body: SingleChildScrollView(
         child: Column(
           children: [
-            entete(context),
 
             Divider(height: 10.0,),
 
@@ -162,56 +161,82 @@ class _Alerter extends State<Alerter>{
                   );
             }),
 
-            SizedBox(height: 50,),
+            SizedBox(height: 10,),
+
+            lieux.length == 0 ? SizedBox() :
+                Text(
+                  'A PARTIR DE VOS LIEUX:',
+                  style: TextStyle(
+                    color: const Color(0xff0040ff),
+                    fontSize: width(context) / 20,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+            SizedBox(height: 5.0),
 
             lieux.length == 0 ? SizedBox() :
             Container(
-              child: DropdownButton(
-                value: lieux[0].id,
-                items: lieux.map((e){
-                  return DropdownMenuItem(
-                    child: Text('${e.denomination}'),
-                    value: e.id,
-                  );
-                }).toList(),
-                onChanged: (value) {
+              height: width(context) / 4,
+              width: width(context) / 1.15,
+              decoration: BoxDecoration(
+                color: const Color(0xff0040ff),
+                borderRadius: BorderRadius.circular(10.0)
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropdownButton(
+                  value: lieux[0].id,
+                  items: lieux.map((e){
+                    return DropdownMenuItem(
+                      child: Text(
+                          '${e.denomination}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      value: e.id,
+                    );
+                  }).toList(),
+                  onChanged: (value) {
 
-                  List<Lieu> lieu = lieux.where((element) => element.id == value).toList();
+                    List<Lieu> lieu = lieux.where((element) => element.id == value).toList();
 
-                  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+                    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-                    amis.forEach((element) {
-                      var data = {
-                        'de': currentFirebaseUser.uid,
-                        'longitude': lieu.first.longitude,
-                        'latitude': lieu.first.latitude,
-                        'timestamp': FieldValue.serverTimestamp(),
-                        'vue': false,
-                      };
+                      amis.forEach((element) {
+                        var data = {
+                          'de': currentFirebaseUser.uid,
+                          'longitude': lieu.first.longitude,
+                          'latitude': lieu.first.latitude,
+                          'timestamp': FieldValue.serverTimestamp(),
+                          'vue': false,
+                        };
 
-                      _firestore.collection('Users').doc(element.id).collection('alertes').add(data);
-                    });
-                    
-                    var datas = {
-                        'de': currentFirebaseUser.uid,
-                        'longitude': position.longitude,
-                        'latitude': position.latitude,
-                        'timestamp': FieldValue.serverTimestamp(),
-                      };
+                        _firestore.collection('Users').doc(element.id).collection('alertes').add(data);
+                      });
 
-                      _firestore.collection('Alertes').add(datas);
+                      var datas = {
+                          'de': currentFirebaseUser.uid,
+                          'longitude': position.longitude,
+                          'latitude': position.latitude,
+                          'timestamp': FieldValue.serverTimestamp(),
+                        };
 
-                    showInSnackBar('Alerte lancée', _scaffoldKey, context);
+                        _firestore.collection('Alertes').add(datas);
 
-                    Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context){
-                                  return HomeScreen(index: 0,);
-                                })
-                            );
-                },
-                hint:Text("SELECTIONNER UNE PLACE")
-                ),
+                      showInSnackBar('Alerte lancée', _scaffoldKey, context);
+
+                      Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context){
+                                    return HomeScreen(index: 0,);
+                                  })
+                              );
+                  },
+                  hint:Text("SELECTIONNER UNE PLACE")
+                  ),
+              ),
               ),
           ],
         ),

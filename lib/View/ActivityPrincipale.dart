@@ -47,12 +47,12 @@ class _HomeScreen extends State<HomeScreen>{
             BottomNavyBarItem(
               icon: Icon(
                 FontAwesomeIcons.home,
-                color: const Color(0xff444d5e),
+                color: Color(0xff0040ff),
               ),
               title: Text(
                   '  Accueil',
                 style: TextStyle(
-                  color: const Color(0xff444d5e),
+                  color: Color(0xff0040ff),
                 ),
               ),
               activeColor: Colors.lightBlue,
@@ -60,12 +60,12 @@ class _HomeScreen extends State<HomeScreen>{
             BottomNavyBarItem(
                 icon: Icon(
                     FontAwesomeIcons.plusCircle,
-                  color: const Color(0xff444d5e),
+                  color: Color(0xff0040ff),
                 ),
                 title: Text(
                     '   Alerter',
                   style: TextStyle(
-                    color: const Color(0xff444d5e),
+                    color: Color(0xff0040ff),
                   ),
                 ),
                 activeColor: Colors.lightBlue
@@ -73,12 +73,12 @@ class _HomeScreen extends State<HomeScreen>{
             BottomNavyBarItem(
                 icon: Icon(
                     FontAwesomeIcons.user,
-                  color: const Color(0xff444d5e),
+                  color: Color(0xff0040ff),
                 ),
                 title: Text(
                     '   Profil',
                   style: TextStyle(
-                    color: const Color(0xff444d5e),
+                    color: Color(0xff0040ff),
                   ),
                 ),
                 activeColor: Colors.lightBlue
@@ -86,12 +86,12 @@ class _HomeScreen extends State<HomeScreen>{
             BottomNavyBarItem(
                 icon: Icon(
                     FontAwesomeIcons.sun,
-                  color: const Color(0xff444d5e),
+                  color: Color(0xff0040ff),
                 ),
                 title: Text(
                     '   Paramètre',
                   style: TextStyle(
-                    color: const Color(0xff444d5e),
+                    color: Color(0xff0040ff),
                   ),
                 ),
                 activeColor: Colors.lightBlue

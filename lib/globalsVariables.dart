@@ -112,129 +112,132 @@ showDialogs(String text, context){
 Widget itemArticle(context, _scaffoldKey, Articles item){
   return Container(
     width: double.infinity,
+    height: width(context) / 1.4,
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          height: width(context) / 2,
-          width: double.infinity,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(width(context) / 25),
-              image: DecorationImage(
-                fit: BoxFit.fitWidth,
-                image: NetworkImage(
-                  '${item.image}'
-                ),
-            )
-          ),
-        ),
-
-        SizedBox(height: 5.0),
-
-        Text(
-          '${item.titre}',
-          style: TextStyle(
-            fontFamily: 'Roboto',
-            fontSize: width(context) / 20,
-            fontWeight: FontWeight.w700,
-          ),
-          textAlign: TextAlign.left,
-        ),
-
-        SizedBox(height: 3.0),
-
-        Text(
-          '${item.description}',
-          style: TextStyle(
-            fontFamily: 'Roboto',
-            fontSize: width(context) / 25,
-            fontStyle: FontStyle.italic,
-          ),
-          textAlign: TextAlign.justify,
-        ),
-
-        SizedBox(height: 7.0,),
-
-        Container(
-          height: width(context) / 10,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+        Expanded(
+          child: Stack(
+            clipBehavior: Clip.none,
             children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: (){
+              Container(
+                height: width(context) / 2,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18.0),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                          '${item.image}'
+                      ),
+                    )
+                ),
+              ),
+
+              Positioned(
+                top: 5.0,
+                right: 10.0,
+                child: InkWell(
+                  onTap: () {
                     FirebaseFirestore.instance.collection('Articles').doc(item.uid)
                         .update({"like": FieldValue.increment(1)});
                     showInSnackBar("Vous avez liké", _scaffoldKey, context);
                   },
                   child: Container(
-                    height: double.infinity,
+                    width: 45.0,
+                    height: 45.0,
                     decoration: BoxDecoration(
-                      color: const Color(0xff99c0e1),
-                      borderRadius: BorderRadius.circular(5.0)
+                      shape: BoxShape.circle,
+                      color: Colors.white,
                     ),
-                    child: Center(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.heart,
-                            color: const Color(0xff444d5e),
-                            size: width(context) / 15,
-                          ),
-                          Text(
-                            '   Like ${item.like}'
-                          )
-                        ],
-                      ),
+                    child: Icon(
+                      FontAwesomeIcons.heart,
+                      color: Colors.red,
                     ),
                   ),
                 ),
               ),
 
-              SizedBox(width: 5.0),
-
-              Expanded(
+              Positioned(
+                bottom: 10.0,
+                left: 10.0,
                 child: GestureDetector(
                   onTap: (){
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context){
-                          return ItemDetails(comment: true, item: item,);
-                        })
+                    context,
+                    MaterialPageRoute(builder: (context){
+                    return ItemDetails(comment: true, item: item,);
+                    })
                     );
                   },
                   child: Container(
-                    height: double.infinity,
+                    height: 50,
                     decoration: BoxDecoration(
-                      color: const Color(0xff99c0e1),
+                      color: Color.fromRGBO(255, 136, 0, 1),
                       borderRadius: BorderRadius.circular(5.0),
                     ),
-                    child: Center(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.comment,
-                            color: const Color(0xff444d5e),
-                            size: width(context) / 15,
-                          ),
-                          Text(
-                              '   Comment ${item.comment}'
-                          )
-                        ],
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.comment,
+                              color: Colors.white,
+                              size: width(context) / 15,
+                            ),
+                            Text(
+                                '   Comment ${item.comment}',
+                              style: TextStyle(
+                                color: Colors.white
+                              )
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               )
+            ]
+          ),
+        ),
+
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      '${item.titre.toUpperCase()}',
+                      style: TextStyle(
+                        fontSize: 17.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5.0,
+              ),
+              Text(
+                '${item.description}',
+                style: TextStyle(
+                  fontSize: 13.0,
+                  color: Color(0xFF343434),
+                ),
+              ),
+              SizedBox(
+                height: 5.0,
+              ),
             ],
           ),
-        )
+        ),
       ],
     ),
   );
@@ -322,17 +325,24 @@ Widget item(String text, IconData icon, VoidCallback press){
       child: FlatButton(
         padding: EdgeInsets.all(20),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Color(0xFFF5F6F9),
+        color: const Color(0xff0040ff),
         onPressed: press,
         child: Row(
           children: [
             Icon(
               icon,
-              color: Color(0xFFFF7643),
+              color: Colors.white,
               size: 22,
             ),
             SizedBox(width: 20),
-            Expanded(child: Text(text)),
+            Expanded(child: Text(
+                text,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold
+              ),
+            )
+            ),
             Icon(Icons.arrow_forward_ios),
           ],
         ),

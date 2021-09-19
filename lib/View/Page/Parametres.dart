@@ -19,6 +19,7 @@ class _About extends State<About>{
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             item('NOTIFICATIONS', FontAwesomeIcons.bell, (){
               Navigator.push(
@@ -27,7 +28,9 @@ class _About extends State<About>{
                   return Notifications();
                 })
               );
-            })
+            }),
+
+            Text('V. 1.0.0, Update Launch Alert')
           ],
         ),
       ),

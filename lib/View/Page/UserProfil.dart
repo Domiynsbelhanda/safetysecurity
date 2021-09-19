@@ -105,7 +105,8 @@ class _UserProfil extends State<UserProfil>{
                                 width: double.infinity,
                                 height: width(context) / 10,
                                 decoration: BoxDecoration(
-                                  color: const Color(0xff99c0e1),
+                                  color: Color(0xff0040ff),
+                                  borderRadius: BorderRadius.circular(15.0)
                                 ),
                                 child: Center(
                                   child: Row(
@@ -114,11 +115,15 @@ class _UserProfil extends State<UserProfil>{
                                     children: [
                                       Icon(
                                         FontAwesomeIcons.penSquare,
-                                        color: const Color(0xff444d5e),
+                                        color: Colors.white,
                                         size: width(context) / 15,
                                       ),
                                       Text(
-                                          '  MODIFIER'
+                                          '  MODIFIER',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold
+                                        )
                                       )
                                     ],
                                   ),
@@ -158,7 +163,8 @@ class _UserProfil extends State<UserProfil>{
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: const Color(0xff99c0e1),
+                            color: Color(0xff0040ff),
+                            borderRadius: BorderRadius.circular(10.0)
                           ),
                           child: Center(
                             child: Row(
@@ -167,11 +173,15 @@ class _UserProfil extends State<UserProfil>{
                               children: [
                                 Icon(
                                   FontAwesomeIcons.users,
-                                  color: const Color(0xff444d5e),
+                                  color: Colors.white,
                                   size: width(context) / 15,
                                 ),
                                 Text(
-                                    '  Vos Proches'
+                                    '  Vos Proches',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold
+                                    )
                                 )
                               ],
                             ),
@@ -195,7 +205,8 @@ class _UserProfil extends State<UserProfil>{
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: const Color(0xff99c0e1),
+                            color: Color(0xff0040ff),
+                            borderRadius: BorderRadius.circular(10.0)
                           ),
                           child: Center(
                             child: Row(
@@ -204,11 +215,15 @@ class _UserProfil extends State<UserProfil>{
                               children: [
                                 Icon(
                                   FontAwesomeIcons.placeOfWorship,
-                                  color: const Color(0xff444d5e),
+                                  color: Colors.white,
                                   size: width(context) / 15,
                                 ),
                                 Text(
-                                    '  Vos Lieux'
+                                    '  Vos Lieux',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold
+                                    )
                                 )
                               ],
                             ),
@@ -236,7 +251,8 @@ class _UserProfil extends State<UserProfil>{
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: const Color(0xff99c0e1),
+                            color: Color(0xff0040ff),
+                            borderRadius: BorderRadius.circular(10.0)
                           ),
                           child: Center(
                             child: Row(
@@ -245,11 +261,15 @@ class _UserProfil extends State<UserProfil>{
                               children: [
                                 Icon(
                                   FontAwesomeIcons.exclamationTriangle,
-                                  color: const Color(0xff444d5e),
+                                  color: Colors.white,
                                   size: width(context) / 15,
                                 ),
                                 Text(
-                                    '  Vos Alertes'
+                                    '  Vos Alertes',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold
+                                    )
                                 )
                               ],
                             ),
@@ -273,7 +293,8 @@ class _UserProfil extends State<UserProfil>{
                         child: Container(
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            color: const Color(0xff99c0e1),
+                            color: Color(0xff0040ff),
+                            borderRadius: BorderRadius.circular(10.0)
                           ),
                           child: Center(
                             child: Row(
@@ -282,11 +303,15 @@ class _UserProfil extends State<UserProfil>{
                               children: [
                                 Icon(
                                   FontAwesomeIcons.bookReader,
-                                  color: const Color(0xff444d5e),
+                                  color: Colors.white,
                                   size: width(context) / 15,
                                 ),
                                 Text(
-                                    '  Vos Publications'
+                                    '  Vos Publications',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold
+                                    )
                                 )
                               ],
                             ),
@@ -315,7 +340,7 @@ class _UserProfil extends State<UserProfil>{
                   width: double.infinity,
                   height: width(context) / 10,
                   decoration: BoxDecoration(
-                    color: const Color(0xff99c0e1),
+                    color: Color(0xff0040ff),
                   ),
                   child: Center(
                     child: Row(
@@ -324,11 +349,15 @@ class _UserProfil extends State<UserProfil>{
                       children: [
                         Icon(
                           FontAwesomeIcons.signOutAlt,
-                          color: const Color(0xff444d5e),
+                          color: Colors.white,
                           size: width(context) / 15,
                         ),
                         Text(
-                            '  Deconnexion'
+                            '  Deconnexion',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold
+                            )
                         )
                       ],
                     ),
