@@ -63,6 +63,7 @@ class _Alerter extends State<Alerter>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      appBar: AppBar(),
       key: _scaffoldKey,
       body: SingleChildScrollView(
         child: Column(

@@ -65,7 +65,7 @@ Widget button(text, context, function){
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(5.0),
-      color: Color(0xff77ACE3),
+      color: Colors.blue,
     ),
     child: TextButton(
       onPressed: function,
@@ -74,7 +74,7 @@ Widget button(text, context, function){
         style: TextStyle(
           fontFamily: 'Roboto',
           fontSize: 16,
-          color: const Color(0xff2a0202),
+          color: Colors.white,
           fontWeight: FontWeight.w700,
           height: 1.0625,
         ),
@@ -115,94 +115,6 @@ Widget itemArticle(context, _scaffoldKey, Articles item){
     height: width(context) / 1.4,
     child: Column(
       children: [
-        Expanded(
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                height: width(context) / 2,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18.0),
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(
-                          '${item.image}'
-                      ),
-                    )
-                ),
-              ),
-
-              Positioned(
-                top: 5.0,
-                right: 10.0,
-                child: InkWell(
-                  onTap: () {
-                    FirebaseFirestore.instance.collection('Articles').doc(item.uid)
-                        .update({"like": FieldValue.increment(1)});
-                    showInSnackBar("Vous avez liké", _scaffoldKey, context);
-                  },
-                  child: Container(
-                    width: 45.0,
-                    height: 45.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: Icon(
-                      FontAwesomeIcons.heart,
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-              ),
-
-              Positioned(
-                bottom: 10.0,
-                left: 10.0,
-                child: GestureDetector(
-                  onTap: (){
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context){
-                    return ItemDetails(comment: true, item: item,);
-                    })
-                    );
-                  },
-                  child: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 136, 0, 1),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              FontAwesomeIcons.comment,
-                              color: Colors.white,
-                              size: width(context) / 15,
-                            ),
-                            Text(
-                                '   Comment ${item.comment}',
-                              style: TextStyle(
-                                color: Colors.white
-                              )
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ]
-          ),
-        ),
 
         Container(
           padding: EdgeInsets.symmetric(vertical: 10.0),
@@ -238,6 +150,101 @@ Widget itemArticle(context, _scaffoldKey, Articles item){
             ],
           ),
         ),
+
+        Expanded(
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: width(context) / 2,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                          '${item.image}'
+                      ),
+                    )
+                ),
+              ),
+            ]
+          ),
+        ),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            InkWell(
+              onTap: () {
+                FirebaseFirestore.instance.collection('Articles').doc(item.uid)
+                    .update({"like": FieldValue.increment(1)});
+                showInSnackBar("Vous avez liké", _scaffoldKey, context);
+              },
+              child: Container(
+                width: 45.0,
+                height: 45.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.solidHeart,
+                      color: Colors.red,
+                    ),
+
+                    Text(
+                        '   ${item.like}',
+                        style: TextStyle(
+                            color: Colors.black
+                        )
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            GestureDetector(
+              onTap: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context){
+                      return ItemDetails(comment: true, item: item,);
+                    })
+                );
+              },
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          FontAwesomeIcons.comment,
+                          color: Colors.black,
+                          size: width(context) / 15,
+                        ),
+                        Text(
+                            '   Commenter',
+                            style: TextStyle(
+                                color: Colors.black
+                            )
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        )
       ],
     ),
   );

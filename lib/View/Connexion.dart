@@ -38,10 +38,35 @@ class _Authentification extends State<Authentification>{
       body: SingleChildScrollView(
         child: Column(
           children: [
-            entete(context),
+
+            SizedBox(height: width(context) / 5),
+
+            Container(
+              height: width(context) / 3,
+              width: width(context) / 3,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    'assets/img/logo.png',
+                  ),
+                  fit: BoxFit.cover
+                ),
+                borderRadius: BorderRadius.circular(width(context)/3),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.white.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 20.0),
 
             Text(
-              'Authentification',
+              'Connectez-vous',
               style: TextStyle(
                 fontFamily: 'Roboto',
                 fontSize: width(context) / 10,
@@ -121,7 +146,7 @@ class _Authentification extends State<Authentification>{
                           style: TextStyle(
                             fontFamily: 'Roboto',
                             fontSize: 14,
-                            color: const Color(0xff2a0202),
+                            color: Colors.blue,
                             height: 1.2142857142857142,
                           ),
                           textHeightBehavior:
@@ -181,9 +206,9 @@ class _Authentification extends State<Authentification>{
                               ),
                             ),
                             TextSpan(
-                              text: 'Inscrivez-vous.',
+                              text: 'S\'inscrire.',
                               style: TextStyle(
-                                color: const Color(0xff0019b9),
+                                color: Colors.blue,
                                 decoration: TextDecoration.underline,
                               ),
                             ),

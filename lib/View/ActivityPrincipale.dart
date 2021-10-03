@@ -29,93 +29,16 @@ class _HomeScreen extends State<HomeScreen>{
 
   Authentifications auth = Authentifications();
 
-  int _currentIndex;
-  PageController _pageController;
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-        bottomNavigationBar: BottomNavyBar(
-          backgroundColor: Colors.white,
-          selectedIndex: _currentIndex,
-          showElevation: true, // use this to remove appBar's elevation
-          onItemSelected: (index) => setState(() {
-            _currentIndex = index;
-          }),
-          items: [
-            BottomNavyBarItem(
-              icon: Icon(
-                FontAwesomeIcons.home,
-                color: Color(0xff0040ff),
-              ),
-              title: Text(
-                  '  Accueil',
-                style: TextStyle(
-                  color: Color(0xff0040ff),
-                ),
-              ),
-              activeColor: Colors.lightBlue,
-            ),
-            BottomNavyBarItem(
-                icon: Icon(
-                    FontAwesomeIcons.plusCircle,
-                  color: Color(0xff0040ff),
-                ),
-                title: Text(
-                    '   Alerter',
-                  style: TextStyle(
-                    color: Color(0xff0040ff),
-                  ),
-                ),
-                activeColor: Colors.lightBlue
-            ),
-            BottomNavyBarItem(
-                icon: Icon(
-                    FontAwesomeIcons.user,
-                  color: Color(0xff0040ff),
-                ),
-                title: Text(
-                    '   Profil',
-                  style: TextStyle(
-                    color: Color(0xff0040ff),
-                  ),
-                ),
-                activeColor: Colors.lightBlue
-            ),
-            BottomNavyBarItem(
-                icon: Icon(
-                    FontAwesomeIcons.sun,
-                  color: Color(0xff0040ff),
-                ),
-                title: Text(
-                    '   Paramètre',
-                  style: TextStyle(
-                    color: Color(0xff0040ff),
-                  ),
-                ),
-                activeColor: Colors.lightBlue
-            ),
-          ],
-        ),
-        body: pages.elementAt(_currentIndex)
+        body: HomePage()
     );
   }
 
-  List pages = [
-    HomePage(),
-    Alerter(),
-    UserProfil(),
-    About(),
-  ];
-
   @override
   void initState() {
-    if(widget.index != null){
-      _currentIndex = widget.index;
-    } else {
-      _currentIndex = 0;
-    }
     super.initState();
   }
 }

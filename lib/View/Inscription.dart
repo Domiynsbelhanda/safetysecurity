@@ -43,7 +43,31 @@ class _Inscription extends State<Inscription>{
       body: SingleChildScrollView(
         child: Column(
           children: [
-            entete(context),
+            SizedBox(height: width(context) / 5),
+
+            Container(
+              height: width(context) / 3,
+              width: width(context) / 3,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(
+                      'assets/img/logo.png',
+                    ),
+                    fit: BoxFit.cover
+                ),
+                borderRadius: BorderRadius.circular(width(context)/3),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.white.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 20.0),
 
             Text(
               'Inscription',

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,7 +16,9 @@ import 'package:safetysecurity/Model/Users.dart';
 import 'package:safetysecurity/View/ActivityPrincipale.dart';
 import 'package:safetysecurity/globalsVariables.dart';
 
+import 'Alerter.dart';
 import 'ArticleItemDetails.dart';
+import 'UserProfil.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -221,6 +224,118 @@ class _HomePage extends State<HomePage>{
           children: [
             Padding(
               padding: const EdgeInsets.all(10.0),
+              child: Container(
+                height: width(context) / 7,
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Image.asset(
+                      'assets/img/logo.png',
+                      fit: BoxFit.cover,
+                    ),
+
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Safety ',
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              fontSize: width(context)/ 15
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'Security',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                                fontSize: width(context)/ 15
+                            ),
+                          ),
+                        ],
+                      ),
+                      textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
+                      textAlign: TextAlign.center,
+                    ),
+
+                    SizedBox(width: 15.0),
+
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context){
+                              return Alerter();
+                            })
+                        );
+                      },
+                      child: IconButton(
+                        icon: Icon(
+                            Icons.notifications,
+                          color: Colors.grey,
+                          size: width(context) / 10
+                        ),
+                      ),
+                    ),
+
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context){
+                              return UserProfil();
+                            })
+                        );
+                      },
+                      child: CircleAvatar(
+                        radius: 30.0,
+                        backgroundImage:
+                        NetworkImage('${currentUsers.image}'),
+                        backgroundColor: Colors.transparent,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: Colors.amber,
+              ),
+              child: TextButton(
+                onPressed: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context){
+                        return Alerter();
+                      })
+                  );
+                },
+                child: Text(
+                  'LANCER UNE ALERTE',
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                    height: 1.0625,
+                  ),
+                  textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+          ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
                   //Début de la publication
@@ -321,7 +436,7 @@ class _HomePage extends State<HomePage>{
                             child: Container(
                               height: double.infinity,
                               decoration: BoxDecoration(
-                                color: const Color(0xff0040ff),
+                                color: Colors.blue,
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               child: Center(
@@ -359,7 +474,7 @@ class _HomePage extends State<HomePage>{
                             child: Container(
                               height: double.infinity,
                               decoration: BoxDecoration(
-                                color: const Color(0xff0040ff),
+                                color: Colors.blue,
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               child: Center(
@@ -388,53 +503,50 @@ class _HomePage extends State<HomePage>{
               ),
             ),
 
-            SizedBox(height: 10.0),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'FIL D\'ACTUALITE',
-                style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: width(context) / 15,
-                  decoration: TextDecoration.underline
-                ),
-                textAlign: TextAlign.left,
+            Container(
+              height: 10.0,
+              decoration: BoxDecoration(
+                color: Colors.grey
               ),
             ),
 
-            Column(
-              children: articles.map((item){
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Card(
-                          elevation: 2.0,
-                            child: Padding(
+            SizedBox(height: 10.0),
+
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Card(
+                child: Column(
+                  children: articles.map((item){
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: utilisateurs(context, item.id, item),
-                            )),
-                        SizedBox(height: 0.0),
-                        GestureDetector(
-                          onTap: (){
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context){
-                                  return ItemDetails(comment: false, item: item,);
-                                })
-                            );
-                          },
-                            child: Card(
-                              elevation: 2.0,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: itemArticle(context, _scaffoldKey, item),
-                                ))),
-                      ],
-                    ),
-                  );
-                }).toList(),
+                            ),
+                            SizedBox(height: 0.0),
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context){
+                                      return ItemDetails(comment: false, item: item,);
+                                    })
+                                );
+                              },
+                                child: Card(
+                                  elevation: 2.0,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: itemArticle(context, _scaffoldKey, item),
+                                    ))),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                ),
+              ),
             ),
           ],
         ),
