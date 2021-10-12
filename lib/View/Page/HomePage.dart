@@ -18,6 +18,7 @@ import 'package:safetysecurity/globalsVariables.dart';
 
 import 'Alerter.dart';
 import 'ArticleItemDetails.dart';
+import 'Notifications.dart';
 import 'UserProfil.dart';
 
 class HomePage extends StatefulWidget{
@@ -63,6 +64,7 @@ class _HomePage extends State<HomePage>{
     getPosition();
 
     articles = [];
+    users = [];
 
     Query collectionReference1 = FirebaseFirestore.instance
         .collection("Articles")
@@ -90,8 +92,6 @@ class _HomePage extends State<HomePage>{
       });
     })
     );
-
-    users = [];
 
     Query collectionReference = FirebaseFirestore.instance
         .collection("Users")
@@ -267,7 +267,7 @@ class _HomePage extends State<HomePage>{
                         Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context){
-                              return Alerter();
+                              return Notifications();
                             })
                         );
                       },

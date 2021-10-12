@@ -328,29 +328,39 @@ Widget backButton(context){
 
 Widget item(String text, IconData icon, VoidCallback press){
     return  Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.all(2.0),
       child: FlatButton(
         padding: EdgeInsets.all(20),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: const Color(0xff0040ff),
+        color: Colors.black.withOpacity(0.5),
         onPressed: press,
-        child: Row(
+        child: Column(
           children: [
-            Icon(
-              icon,
-              color: Colors.white,
-              size: 22,
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50.0),
+                border: Border.all(
+                  color: Colors.black
+                )
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  icon,
+                  color: Colors.white,
+                  size: 22,
+                ),
+              ),
             ),
-            SizedBox(width: 20),
-            Expanded(child: Text(
+            SizedBox(height: 20),
+            Text(
                 text,
               style: TextStyle(
                 color: Colors.white,
-                fontWeight: FontWeight.bold
+                fontWeight: FontWeight.normal,
               ),
-            )
+              textAlign: TextAlign.center,
             ),
-            Icon(Icons.arrow_forward_ios),
           ],
         ),
       ),

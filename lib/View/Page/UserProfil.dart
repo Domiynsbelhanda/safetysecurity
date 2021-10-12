@@ -8,6 +8,8 @@ import 'package:safetysecurity/View/Page/YourPublication.dart';
 
 import '../../globalsVariables.dart';
 import 'AddPlace.dart';
+import 'Alerter.dart';
+import 'Notifications.dart';
 
 class UserProfil extends StatefulWidget{
   @override
@@ -25,18 +27,66 @@ class _UserProfil extends State<UserProfil>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0.0,
+        iconTheme: IconThemeData(
+          color: Colors.black
+        ),
+        title: Text(
+            'Mon Profil',
+          style: TextStyle(
+            color: Colors.black
+          ),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context){
+                    return Notifications();
+                  })
+              );
+            },
+            child: IconButton(
+              icon: Icon(
+                  Icons.notifications,
+                  color: Colors.black,
+                  size: width(context) / 10
+              ),
+            ),
+          ),
+
+          GestureDetector(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context){
+                    return Alerter();
+                  })
+              );
+            },
+            child: IconButton(
+              icon: Icon(
+                  Icons.settings,
+                  color: Colors.black,
+                  size: width(context) / 10
+              ),
+            ),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Stack(
               children: [
-                entete(context),
-
                 Center(
                   child: Container(
-                    margin: EdgeInsets.only(top: height(context) / 8),
+                    margin: EdgeInsets.only(top: height(context) / 15),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -58,7 +108,7 @@ class _UserProfil extends State<UserProfil>{
                           style: TextStyle(
                             fontFamily: 'Roboto',
                             fontSize: width(context) / 15,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.normal,
                             height: 1.0625,
                             letterSpacing: 2,
                           ),
@@ -90,49 +140,31 @@ class _UserProfil extends State<UserProfil>{
                           textAlign: TextAlign.center,
                         ),
 
-                        Divider(
-                          height: 5.0
-                        ),
+                        SizedBox(height: 20.0),
 
-                        Align(
-                          alignment: FractionalOffset.bottomCenter,
-                          child: Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: GestureDetector(
-                              onTap: (){
-
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                height: width(context) / 10,
-                                decoration: BoxDecoration(
-                                  color: Color(0xff0040ff),
-                                  borderRadius: BorderRadius.circular(15.0)
-                                ),
-                                child: Center(
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        FontAwesomeIcons.penSquare,
-                                        color: Colors.white,
-                                        size: width(context) / 15,
-                                      ),
-                                      Text(
-                                          '  MODIFIER',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold
-                                        )
-                                      )
-                                    ],
-                                  ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 50.0, right: 50.0),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                border: Border.all(color: Colors.lightBlue),
+                                borderRadius: BorderRadius.circular(15.0)
+                            ),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                    '  MODIFIER',
+                                    style: TextStyle(
+                                        color: Colors.lightBlue,
+                                        fontWeight: FontWeight.normal
+                                    )
                                 ),
                               ),
-                            ),
+                            )
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -162,31 +194,24 @@ class _UserProfil extends State<UserProfil>{
                           );
                         },
                         child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Color(0xff0040ff),
-                            borderRadius: BorderRadius.circular(10.0)
-                          ),
-                          child: Center(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.users,
-                                  color: Colors.white,
-                                  size: width(context) / 15,
-                                ),
-                                Text(
-                                    '  Vos Proches',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold
-                                    )
-                                )
-                              ],
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                border: Border.all(color: Colors.lightBlue),
+                                borderRadius: BorderRadius.circular(15.0)
                             ),
-                          ),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                    '  VOS AMIS',
+                                    style: TextStyle(
+                                        color: Colors.lightBlue,
+                                        fontWeight: FontWeight.normal
+                                    )
+                                ),
+                              ),
+                            )
                         ),
                       ),
                     ),
@@ -204,31 +229,24 @@ class _UserProfil extends State<UserProfil>{
                           );
                         },
                         child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Color(0xff0040ff),
-                            borderRadius: BorderRadius.circular(10.0)
-                          ),
-                          child: Center(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.placeOfWorship,
-                                  color: Colors.white,
-                                  size: width(context) / 15,
-                                ),
-                                Text(
-                                    '  Vos Lieux',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold
-                                    )
-                                )
-                              ],
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                border: Border.all(color: Colors.lightBlue),
+                                borderRadius: BorderRadius.circular(15.0)
                             ),
-                          ),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                    '  VOS LIEUX',
+                                    style: TextStyle(
+                                        color: Colors.lightBlue,
+                                        fontWeight: FontWeight.normal
+                                    )
+                                ),
+                              ),
+                            )
                         ),
                       ),
                     )
@@ -250,31 +268,24 @@ class _UserProfil extends State<UserProfil>{
                       child: GestureDetector(
                         onTap: (){},
                         child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Color(0xff0040ff),
-                            borderRadius: BorderRadius.circular(10.0)
-                          ),
-                          child: Center(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.exclamationTriangle,
-                                  color: Colors.white,
-                                  size: width(context) / 15,
-                                ),
-                                Text(
-                                    '  Vos Alertes',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold
-                                    )
-                                )
-                              ],
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                border: Border.all(color: Colors.lightBlue),
+                                borderRadius: BorderRadius.circular(15.0)
                             ),
-                          ),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                    'VOS ALERTES',
+                                    style: TextStyle(
+                                        color: Colors.lightBlue,
+                                        fontWeight: FontWeight.normal
+                                    )
+                                ),
+                              ),
+                            )
                         ),
                       ),
                     ),
@@ -292,31 +303,24 @@ class _UserProfil extends State<UserProfil>{
                           );
                         },
                         child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Color(0xff0040ff),
-                            borderRadius: BorderRadius.circular(10.0)
-                          ),
-                          child: Center(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.bookReader,
-                                  color: Colors.white,
-                                  size: width(context) / 15,
-                                ),
-                                Text(
-                                    '  Vos Publications',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold
-                                    )
-                                )
-                              ],
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                border: Border.all(color: Colors.lightBlue),
+                                borderRadius: BorderRadius.circular(15.0)
                             ),
-                          ),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                    'VOS PUBLICATIONS',
+                                    style: TextStyle(
+                                        color: Colors.lightBlue,
+                                        fontWeight: FontWeight.normal
+                                    )
+                                ),
+                              ),
+                            )
                         ),
                       ),
                     )
@@ -337,31 +341,27 @@ class _UserProfil extends State<UserProfil>{
                       })
                   );
                 },
-                child: Container(
-                  width: double.infinity,
-                  height: width(context) / 10,
-                  decoration: BoxDecoration(
-                    color: Color(0xff0040ff),
-                  ),
-                  child: Center(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.signOutAlt,
-                          color: Colors.white,
-                          size: width(context) / 15,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 50.0, right: 50.0),
+                  child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(color: Colors.lightBlue),
+                          borderRadius: BorderRadius.circular(15.0)
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                              'DECONNEXION',
+                              style: TextStyle(
+                                  color: Colors.lightBlue,
+                                  fontWeight: FontWeight.normal
+                              )
+                          ),
                         ),
-                        Text(
-                            '  Deconnexion',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold
-                            )
-                        )
-                      ],
-                    ),
+                      )
                   ),
                 ),
               ),
