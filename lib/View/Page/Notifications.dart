@@ -7,6 +7,9 @@ import 'package:safetysecurity/Model/Users.dart';
 import '../../globalsVariables.dart';
 import '../ActivityPrincipale.dart';
 import '../GoogleMaps.dart';
+import 'UserProfil.dart';
+
+import 'package:timeago/timeago.dart' as timeago;
 
 class Notifications extends StatefulWidget{
   @override
@@ -32,8 +35,9 @@ class _Notifications extends State<Notifications>{
     // TODO: implement build
     return Scaffold(
       key: _scaffoldKey,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 0.0,
+        elevation: 3.0,
         backgroundColor: Colors.white,
         leading: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -44,13 +48,39 @@ class _Notifications extends State<Notifications>{
           ),
         ),
         title: Text(
-          'SAFETY SECURITY',
+          'Notifications',
           style: TextStyle(
             fontFamily: 'Roboto',
-            fontSize: width(context) / 15,
-            fontWeight: FontWeight.w700,
+            fontSize: 18.0,
+            color: couleurText,
+            fontWeight: FontWeight.normal,
           ),
         ),
+        actions: [
+          GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context){
+                  return UserProfil();
+                }
+              )
+              );
+            },
+            child: Container(
+              height: 40.0,
+              width: 40.0,
+              child: CircleAvatar(
+                radius: 30.0,
+                backgroundImage:
+                  NetworkImage('${currentUsers.image}'),
+                  backgroundColor: Colors.transparent,
+                ),
+              ),
+          ),
+
+            SizedBox(width: 16.0)
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -58,10 +88,8 @@ class _Notifications extends State<Notifications>{
           children: [
             SizedBox(height: 10.0,),
             invit.length == 0 && alertes.length == 0 ? 
-            Center(child: Text('Vous avez aucune notification')) : 
-            Center(child: Text('Vos notifications :')),
-
-            SizedBox(height: 5.0,), 
+            Text('Vous avez aucune notification') : 
+            Container(),
 
             Column(
               children: alertes.map((e) {
@@ -87,6 +115,7 @@ class _Notifications extends State<Notifications>{
   Widget invitation(Invitation item){
     List<Users> us = users.where((element) => element.id.contains(item.expeditaire)).toList();
     Users itemUser = us.first;
+
     return Padding(
       padding: EdgeInsets.all(10.0),
       child: Container(
@@ -231,126 +260,142 @@ class _Notifications extends State<Notifications>{
   Widget alert(Alerte item){
     List<Users> us = users.where((element) => element.id.contains(item.de)).toList();
     Users itemUser = us.first;
+
+    var times = timeago.format(item.timestamp.toDate());
     return Padding(
-      padding: EdgeInsets.all(10.0),
+      padding: EdgeInsets.all(16.0),
       child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: const Color(0xffe3f2fd),
-          borderRadius: BorderRadius.circular(5.0)
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Text(
-                'Vous avez une alerte de : '
+        height: 76.0,
+        child: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(56.0),
+                image: DecorationImage(
+                  image: NetworkImage('${itemUser.image}'),
+                  fit: BoxFit.cover
+                )
               ),
+              height: 56.0,
+              width: 56.0,
+            ),
+            SizedBox(width: 16.0,),
 
-              SizedBox(height: 3.0),
-
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    height: width(context) / 10,
-                    child: CircleAvatar(
-                      radius: 30.0,
-                      backgroundImage:
-                      NetworkImage('${itemUser.image}'),
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '${itemUser.name}',
+            Container(
+              width: width(context) - (56 + 16 + 16 +20),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 0.0),
+                child: Column(
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        text : '${itemUser.name.toUpperCase()}',
                         style: TextStyle(
                           fontFamily: 'Roboto',
+                          fontSize: 14.0,
+                          color: couleurPrimaire
                         ),
-                        textAlign: TextAlign.left,
-                      ),
-
-                      Text(
-                        '${itemUser.email}',
-                        style: TextStyle(
-                          fontFamily: 'Roboto',
-                          fontSize: width(context) / 30,
-                          fontStyle: FontStyle.italic,
-                        ),
-                        textAlign: TextAlign.left,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Container(
-                      child: TextButton(
-                        onPressed: () async{
-                          
-                          showInSnackBar('Alertes vue', _scaffoldKey, context);
-
-                          Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context){
-                                  return MapsView(alerte: item);
-                                })
-                            );
-                        }, 
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: const Color(0xffe3f2fd),
-                          ),
-                          child: Text(
-                            'Voir sur la carte'
-                          ),
-                        )
-                      ),
-                    ),
-                  ),
-
-                  Expanded(
-                    child: Container(
-                      child: TextButton(
-                        onPressed: () async{
-                          final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-                                await
-                                _firestore.collection('Users')
-                                    .doc(currentFirebaseUser.uid)
-                                    .collection('alertes')
-                                    .doc(item.id)
-                                    .update({'vue': true});
-                          showInSnackBar('Alertes vue', _scaffoldKey, context);
-                          Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context){
-                                  return HomeScreen(index: 0,);
-                                })
-                            );
-                        }, 
-                        child: Container(
-                          child: Text(
-                            'Vue',
+                        children: [
+                          TextSpan(
+                            text: ' vous a envoyé une alerte :',
                             style: TextStyle(
-                              color: const Color(0xffbf360c)
-                            ),
+                              color: couleurText
+                            )
                           ),
-                        )
+
+                          TextSpan(
+                            text: ' ${times}',
+                            style: TextStyle(
+                              color: couleurSecondaire
+                            )
+                          )
+                        ]
                       ),
                     ),
-                  ),
-                ],
-              )
-            ],
-          ),
+
+                    SizedBox(height: 8.0,),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: GestureDetector(
+                            onTap: () async{
+                              
+                              showInSnackBar('Alertes vue', _scaffoldKey, context);
+
+                              Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context){
+                                      return MapsView(alerte: item);
+                                    })
+                                );
+                            }, 
+                            child: Container(
+                              padding: EdgeInsets.all(3.0),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: couleurPrimaire,
+                                  width: 2.0
+                                ),
+                                borderRadius: BorderRadius.circular(3.0),
+                              ),
+                              child: Text(
+                                'Voir sur la carte',
+                                style: TextStyle(
+                                  color: couleurPrimaire,
+                                  fontSize: 14.0
+                                ),
+                              ),
+                            )
+                          ),
+                        ),
+
+                        SizedBox(width: 8.0,),
+
+                        Container(
+                          child: GestureDetector(
+                            onTap: () async{
+                              final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+                                    await
+                                    _firestore.collection('Users')
+                                        .doc(currentFirebaseUser.uid)
+                                        .collection('alertes')
+                                        .doc(item.id)
+                                        .update({'vue': true});
+                              showInSnackBar('Alertes vue', _scaffoldKey, context);
+                              Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context){
+                                      return HomeScreen(index: 0,);
+                                    })
+                                );
+                            }, 
+                            child: Container(
+                              padding: EdgeInsets.all(3.0),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: couleurSecondaire,
+                                  width: 2.0
+                                ),
+                                borderRadius: BorderRadius.circular(3.0),
+                              ),
+                              child: Text(
+                                'Refuser',
+                                style: TextStyle(
+                                  color: couleurSecondaire
+                                ),
+                              ),
+                            )
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

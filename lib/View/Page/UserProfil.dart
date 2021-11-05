@@ -199,7 +199,7 @@ class _UserProfil extends State<UserProfil>{
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                      '  MODIFIER',
+                                      '  Editer',
                                       style: TextStyle(
                                           color: Colors.lightBlue,
                                           fontWeight: FontWeight.normal

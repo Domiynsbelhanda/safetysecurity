@@ -32,13 +32,10 @@ class _ItemDetails extends State<ItemDetails>{
 
   TextEditingController myCommentController = new TextEditingController();
 
-  List<Commentaires> commentaires;
+  List<Commentaires> commentaires = [];
 
-
-  @override
-  void initState() {
-    comment = widget.comment;
-    commentaires = [];
+  commente(){
+    commentaires.clear();
     Query collectionReference = FirebaseFirestore.instance
         .collection("Articles").doc(widget.item.uid)
         .collection('comment')
@@ -49,18 +46,25 @@ class _ItemDetails extends State<ItemDetails>{
         .snapshots()
         .listen((data) { data.docs.forEach((doc) {
 
-      setState(() {
-        commentaires.add(
+        setState(() {
+          commentaires.add(
             new Commentaires(
               id: doc.get('id'),
               description: doc.get("description"),
               timestamp: doc.get('timestamp'),
             )
         );
-      });
+        });
     });
         }
     );
+  }
+
+
+  @override
+  void initState() {
+    comment = true;
+    commente();
 
     super.initState();
   }
@@ -137,7 +141,7 @@ class _ItemDetails extends State<ItemDetails>{
       ) : SizedBox(),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
@@ -147,17 +151,6 @@ class _ItemDetails extends State<ItemDetails>{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   backButton(context),
-
-                  SizedBox(width: 15.0),
-
-                  Text(
-                    'SAFETY SECURITY',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: width(context) / 15,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  )
                 ],
               ),
 
@@ -173,126 +166,11 @@ class _ItemDetails extends State<ItemDetails>{
 
                     utilisateurs(context, widget.item.id, widget.item),
 
-                    SizedBox(height: 5.0),
+                    SizedBox(height: 8.0),
 
-                    Container(
-                      height: width(context) / 2,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(width(context) / 25),
-                          image: DecorationImage(
-                            fit: BoxFit.fitWidth,
-                            image: NetworkImage(
-                                '${widget.item.image}'
-                            ),
-                          )
-                      ),
-                    ),
+                    itemArticle(context, _scaffoldKey, widget.item),
 
-                    SizedBox(height: 5.0),
-
-                    Text(
-                      '${widget.item.titre}',
-                      style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: width(context) / 20,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-
-                    SizedBox(height: 3.0),
-
-                    Text(
-                      '${widget.item.description}',
-                      style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: width(context) / 25,
-                        fontStyle: FontStyle.italic,
-                      ),
-                      textAlign: TextAlign.justify,
-                    ),
-
-                    comment ? SizedBox() :
-                    Container(
-                      height: width(context) / 10,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: (){
-                                FirebaseFirestore.instance.collection('Articles').doc(widget.item.uid)
-                                    .update({"like": FieldValue.increment(1)});
-                                showInSnackBar("Vous avez liké", _scaffoldKey, context);
-                              },
-                              child: Container(
-                                height: double.infinity,
-                                decoration: BoxDecoration(
-                                    color: const Color(0xff99c0e1),
-                                    borderRadius: BorderRadius.circular(5.0)
-                                ),
-                                child: Center(
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        FontAwesomeIcons.heart,
-                                        color: const Color(0xff444d5e),
-                                        size: width(context) / 15,
-                                      ),
-                                      Text(
-                                          '   Like ${widget.item.like}'
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          SizedBox(width: 5.0),
-
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: (){
-                                setState(() {
-                                  comment = !comment;
-                                });
-                              },
-                              child: Container(
-                                height: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xff99c0e1),
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                child: Center(
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        FontAwesomeIcons.comment,
-                                        color: const Color(0xff444d5e),
-                                        size: width(context) / 15,
-                                      ),
-                                      Text(
-                                          '   Comment ${widget.item.comment}'
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: 10.0),
+                    SizedBox(height: 16.0),
 
                     Divider(
                       height: 10.0

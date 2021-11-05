@@ -67,61 +67,6 @@ class _Alerter extends State<Alerter>{
     // TODO: implement build
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        elevation: 0.0,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: <Color>[
-                Colors.amberAccent,
-                Colors.amber
-              ],
-            ),
-          ),
-        ),
-        title: Text(
-          'Alert'
-        ),
-        actions: [
-          GestureDetector(
-            onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context){
-                    return Notifications();
-                  })
-              );
-            },
-            child: IconButton(
-              icon: Icon(
-                  Icons.notifications,
-                  color: Colors.white,
-                  size: width(context) / 10
-              ),
-            ),
-          ),
-
-          GestureDetector(
-            onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context){
-                    return Alerter();
-                  })
-              );
-            },
-            child: IconButton(
-              icon: Icon(
-                  Icons.settings,
-                  color: Colors.white,
-                  size: width(context) / 10
-              ),
-            ),
-          ),
-        ],
-      ),
       key: _scaffoldKey,
       body: Container(
         alignment: Alignment.center,
@@ -130,7 +75,7 @@ class _Alerter extends State<Alerter>{
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: <Color>[
-                Colors.amberAccent,
+                Colors.orange,
                 Colors.deepOrange
               ],
             ),
@@ -138,9 +83,92 @@ class _Alerter extends State<Alerter>{
         child: SingleChildScrollView(
           child: Column(
             children: [
+              Container(
+                height: 56.0,
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: 28,
+                              height: 28,
+                              child: Icon(
+                                FontAwesomeIcons.arrowLeft,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(width: 8.0),
+
+                          Text(
+                            'Alert', 
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context){
+                                    return Notifications();
+                                  })
+                              );
+                            },
+                            child: Container(
+                              height: 56.0,
+                              child: Icon(
+                                    Icons.notifications,
+                                    color: Colors.white,
+                                    size: width(context) / 10
+                                ),
+                            ),
+                          ),
+
+                          SizedBox(width: 8.0),
+
+                          GestureDetector(
+                            onTap: (){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context){
+                                    return Alerter();
+                                  })
+                              );
+                            },
+                            child: Icon(
+                                  Icons.settings,
+                                  color: Colors.white,
+                                  size: width(context) / 10
+                              ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 32.0,),
 
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -156,21 +184,19 @@ class _Alerter extends State<Alerter>{
                     ),
 
                     Container(
-                      width: width(context) / 4,
-                      height: width(context) / 4,
+                      width: width(context) / 6,
+                      height: width(context) / 6,
                       child: Image.asset(
                         'assets/img/logo2.png',
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fitHeight,
                       ),
                     )
                   ],
                 ),
               ),
 
-              SizedBox(height: 10.0),
-
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Text(
                   'Veuillez Choisir une position.',
                   style: TextStyle(
@@ -180,7 +206,7 @@ class _Alerter extends State<Alerter>{
               ),
 
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(16.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -220,6 +246,8 @@ class _Alerter extends State<Alerter>{
                         );
                       }),
                     ),
+
+                    SizedBox(width: 8.0),
                     Expanded(
                       child: item('ALERTER SUR UNE POSITION', FontAwesomeIcons.mapMarkedAlt, (){
 
@@ -286,7 +314,7 @@ class _Alerter extends State<Alerter>{
                   Text(
                     'A PARTIR DE VOS LIEUX:',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontSize: width(context) / 20,
                     ),
                   ),

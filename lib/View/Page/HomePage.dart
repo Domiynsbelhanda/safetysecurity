@@ -16,6 +16,8 @@ import 'package:safetysecurity/Model/Users.dart';
 import 'package:safetysecurity/View/ActivityPrincipale.dart';
 import 'package:safetysecurity/globalsVariables.dart';
 
+import 'package:fdottedline/fdottedline.dart';
+
 import 'Alerter.dart';
 import 'ArticleItemDetails.dart';
 import 'Notifications.dart';
@@ -59,12 +61,8 @@ class _HomePage extends State<HomePage>{
     position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
-  @override
-  void initState() {
-    getPosition();
-
-    articles = [];
-    users = [];
+  article(){
+    articles.clear();
 
     Query collectionReference1 = FirebaseFirestore.instance
         .collection("Articles")
@@ -75,8 +73,7 @@ class _HomePage extends State<HomePage>{
         .snapshots()
         .listen((data) => data.docs.forEach((doc) {
 
-      setState(() {
-        articles.add(
+      articles.add(
             new Articles(
                 titre: doc.get('titre'),
                 description: doc.get("description"),
@@ -89,9 +86,12 @@ class _HomePage extends State<HomePage>{
                 uid: doc.id
             )
         );
-      });
     })
     );
+  }
+
+  user(){
+    users = [];
 
     Query collectionReference = FirebaseFirestore.instance
         .collection("Users")
@@ -117,6 +117,15 @@ class _HomePage extends State<HomePage>{
       });
     })
     );
+  }
+
+  @override
+  void initState() {
+    getPosition();
+
+    article();
+
+    user();
 
     String userid = currentFirebaseUser.uid;
 
@@ -213,346 +222,611 @@ class _HomePage extends State<HomePage>{
     );
   }
 
+  final GlobalKey input = GlobalKey();
+  RenderBox box;
+  Offset positions;
+  double y;
+  double x;
+  Size size;
+
+  bool visible = false;
+  bool time = false;
+
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
       key: _scaffoldKey,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                height: width(context) / 7,
-                width: double.infinity,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Image.asset(
-                      'assets/img/logo.png',
-                      fit: BoxFit.cover,
-                    ),
+      backgroundColor: Colors.white,
+      floatingActionButton: floatingAlert(context),
+      body: Stack(
+        children: [
+          
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Container(
+                    height: 56.0,
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Image.asset(
+                          'assets/img/logo.png',
+                          fit: BoxFit.fitHeight,
+                          height: 32.0,
+                          width: 32.0
+                        ),
 
-                    Text.rich(
-                      TextSpan(
-                        children: [
+                        SizedBox(width: 16.0),
+
+                        Text.rich(
                           TextSpan(
-                            text: 'Safety ',
-                            style: TextStyle(
-                              color: Colors.black54,
-                              fontWeight: FontWeight.bold,
-                              fontSize: width(context)/ 15
+                            children: [
+                              TextSpan(
+                                text: 'Safety ',
+                                style: TextStyle(
+                                  color: couleurNeutre,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 20.0
+                                ),
+                              ),
+                              TextSpan(
+                                text: 'Security',
+                                style: TextStyle(
+                                  color: couleurNeutre,
+                                  fontWeight: FontWeight.bold,
+                                    fontSize: 20.0
+                                ),
+                              ),
+                            ],
+                          ),
+                          textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
+                          textAlign: TextAlign.center,
+                        ),
+
+                        SizedBox(width: 10.0),
+
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context){
+                                  return Notifications();
+                                })
+                            );
+                          },
+                          child: IconButton(
+                            icon: Icon(
+                                Icons.notifications,
+                              color: couleurNeutre,
+                              size: 20.0
                             ),
                           ),
-                          TextSpan(
-                            text: 'Security',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                                fontSize: width(context)/ 15
+                        ),
+
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context){
+                                  return UserProfil();
+                                })
+                            );
+                          },
+                          child: Container(
+                            height: 40.0,
+                            width: 40.0,
+                            child: CircleAvatar(
+                              radius: 30.0,
+                              backgroundImage:
+                              NetworkImage('${currentUsers.image}'),
+                              backgroundColor: Colors.transparent,
                             ),
                           ),
-                        ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.only(left:16.0, right: 16.0),
+                  child: Container(
+                    height: 36,
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 36.0,
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              GestureDetector(
+                                onTap: getImage,
+                                child: Container(
+                                  height: 36.0,
+                                  width: 36.0,
+                                  child: FDottedLine(
+                                    color: sampleImage == null ? couleurNeutre.withOpacity(0.5)
+                                    : Colors.red,
+                                    height: 36.0,
+                                    width: 36.0,
+                                    strokeWidth: 1.0,
+                                    dottedLength: 4.0,
+                                    space: 2.0,
+                                    corner: FDottedLineCorner.all(36),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Container(
+                                        child: Image.asset(
+                                          'assets/img/icon-image.png',
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    )
+                                  ),
+                                ),
+                              ),
+
+                              SizedBox(width: 16.0),
+
+                              Expanded(
+                                key: input,
+                                child: GestureDetector(
+                                  onTap: (){
+                                    setState(() {
+                                      box = input.currentContext.findRenderObject() as RenderBox;
+                                      positions = box.localToGlobal(Offset.zero); //this is global position
+                                      y = positions.dy;
+                                      x = positions.dx;
+                                      size = box.size;
+
+                                      visible = !visible;
+                                    });
+                                  },
+                                  child: Container(
+                                    height: 36.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(36),
+                                      border: Border.all(color: couleurNeutre)
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 8.0),
+                                          child: Text(
+                                            'Ecrire un article'
+                                          ),
+                                        ), 
+
+                                        SizedBox(width: 8.0),
+
+                                        GestureDetector(
+                                          onTap: (){
+                                            setState(() {
+                                              time = !time;
+                                            });
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(3.0),
+                                            child: Container(
+                                              height: 33.0,
+                                              width: 33.0,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(33),
+                                                color: Colors.black12,
+                                              ),
+                                              child: Icon(
+                                                FontAwesomeIcons.calendar,
+                                                size: 16.0,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ]
+                          )
+                        ),
+                      ],
+                    )
+                  ),
+                ),
+
+                SizedBox(height: 8.0),
+
+                        time ?
+                        DateTimePicker(
+                          type: DateTimePickerType.dateTimeSeparate,
+                          dateMask: 'd MMM, yyyy',
+                          initialValue: DateTime.now().toString(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                          icon: Icon(Icons.event),
+                          dateLabelText: 'Date',
+                          timeLabelText: "Heure",
+                          selectableDayPredicate: (date) {
+                            // Disable weekend days to select from the calendar
+                            if (date.weekday == 6 || date.weekday == 7) {
+                              return false;
+                            }
+
+                            return true;
+                          },
+                          onChanged: (val) {
+                            times = val;
+                          },
+                          validator: (val) {
+                            times = val;
+                            return null;
+                          },
+                          onSaved: (val) {
+                            times = val;
+                          },
+                        ) : Container(),
+                
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Container(
+                    width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40.0),
+                    color: couleurPrincipale,
+                  ),
+                  child: TextButton(
+                    onPressed: ()=> publierArticle(),
+                    child: Text(
+                      'LANCER UNE ALERTE',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                        height: 1.0625,
                       ),
                       textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
                       textAlign: TextAlign.center,
                     ),
+                  ),
+              ),
+                ),
 
-                    SizedBox(width: 15.0),
+                Container(
+                  height: 8.0,
+                  decoration: BoxDecoration(
+                    color: couleurNeutre.withOpacity(0.5)
+                  ),
+                ),
 
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context){
-                              return Notifications();
-                            })
-                        );
-                      },
-                      child: IconButton(
-                        icon: Icon(
-                            Icons.notifications,
-                          color: Colors.grey,
-                          size: width(context) / 10
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Container(
+                    child: Column(
+                      children: articles.map((item){
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                  color: couleurNeutre.withOpacity(0.5),
+                                ),
+                                borderRadius: BorderRadius.circular(10.0)
+                              ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: utilisateurs(context, item.id, item),
+                                  ),
+                                  GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context){
+                                            return ItemDetails(comment: false, item: item,);
+                                          })
+                                      );
+                                    },
+                                      child: itemArticles(context, _scaffoldKey, item)),
+                                ],
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        
+          visible ?
+          Positioned(
+              top: y,
+              left: x,
+              child: Card(
+                elevation: 5.0,
+                child: Container(
+                  height: 164,
+                  width: size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(5.0)
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Form(
+                        key: formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            //Titre
+                            Container(
+                              width: double.infinity,
+                              height: 36.0,
+                              child: TextField(
+                                focusNode: myTitreFocus,
+                                controller: myTitreController,
+                                keyboardType: TextInputType.text,
+                                style: TextStyle(
+                                    fontSize: width(context) / 25
+                                ),
+                                decoration: InputDecoration(
+                                    labelText: "Titre de l'alerte",
+                                    border: new OutlineInputBorder(
+                                        borderSide: new BorderSide(
+                                          color: const Color(0xff444d5e),
+                                        )
+                                    )
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(height: 8.0),
+
+                            Container(
+                              width: double.infinity,
+                              height: 56.0,
+                              child: TextField(
+                                focusNode: myDescriptionFocus,
+                                controller: myDescriptionController,
+                                keyboardType: TextInputType.multiline,
+                                style: TextStyle(
+                                    fontSize: width(context) / 25
+                                ),
+                                decoration: InputDecoration(
+                                    labelText: "Description |",
+                                    border: new OutlineInputBorder(
+                                        borderSide: new BorderSide(
+                                          color: const Color(0xff444d5e),
+                                        )
+                                    )
+                                ),
+                              ),
+                            ),
+
+                            SizedBox(height: 8.0),
+
+                            Container(
+                              height: 40.0,
+                              width: size.width - 16,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  GestureDetector(
+                                    onTap: (){
+                                      setState(() {
+                                        visible = !visible;
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 40.0,
+                                      width: (size.width - 32) / 2,
+                                      decoration: BoxDecoration(
+                                        color: couleurPrimaire.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(5)
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Annuler'
+                                        ),
+                                      )
+                                    ),
+                                  ),
+
+                                  GestureDetector(
+                                    onTap: (){
+                                      setState(() {
+                                        visible = !visible;
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 40.0,
+                                      width: (size.width - 32) / 2,
+                                      decoration: BoxDecoration(
+                                        color: couleurPrimaire,
+                                        borderRadius: BorderRadius.circular(5)
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Suivant'
+                                        ),
+                                      )
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
                         ),
                       ),
+                  ),
+                ),
+              ),
+
+            ) : Container(),
+        ],
+      ),
+    );
+  }
+
+  
+Widget itemArticles(context, _scaffoldKey, Articles item){
+  return Container(
+    width: double.infinity,
+    height: 300,
+    child: Column(
+      children: [
+
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '${item.titre.toUpperCase()}',
+                        style: TextStyle(
+                          fontSize: 17.0,
+                          color: couleurText,                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 8.0,
+                ),
+                Text(
+                  '${item.description}',
+                  style: TextStyle(
+                    fontSize: 13.0,
+                    color: couleurText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        Expanded(
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: 185,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                          '${item.image}'
+                      ),
+                    )
+                ),
+              ),
+            ]
+          ),
+        ),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            InkWell(
+              onTap: () {
+                FirebaseFirestore.instance.collection('Articles').doc(item.uid)
+                    .update({"like": FieldValue.increment(1)});
+                showInSnackBar("Vous avez liké", _scaffoldKey, context);
+              },
+              child: Container(
+                width: 45.0,
+                height: 45.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.solidHeart,
+                      color: couleurPrincipale,
                     ),
 
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context){
-                              return UserProfil();
-                            })
-                        );
-                      },
-                      child: CircleAvatar(
-                        radius: 30.0,
-                        backgroundImage:
-                        NetworkImage('${currentUsers.image}'),
-                        backgroundColor: Colors.transparent,
-                      ),
+                    Text(
+                        '${item.like}',
+                        style: TextStyle(
+                            color: Colors.black
+                        )
                     ),
                   ],
                 ),
               ),
             ),
 
-            Padding(
-              padding: const EdgeInsets.all(10.0),
+            GestureDetector(
+              onTap: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context){
+                      return ItemDetails(comment: true, item: item,);
+                    })
+                );
+              },
               child: Container(
-                width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: Colors.amber,
-              ),
-              child: TextButton(
-                onPressed: (){
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context){
-                        return Alerter();
-                      })
-                  );
-                },
-                child: Text(
-                  'LANCER UNE ALERTE',
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                    height: 1.0625,
-                  ),
-                  textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
-                  textAlign: TextAlign.center,
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
                 ),
-              ),
-          ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  //Début de la publication
-                  Form(
-                    key: formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        //Titre
-                        Container(
-                          width: double.infinity,
-                          height: width(context) / 12.5,
-                          child: TextField(
-                            focusNode: myTitreFocus,
-                            controller: myTitreController,
-                            keyboardType: TextInputType.text,
-                            style: TextStyle(
-                                fontSize: width(context) / 25
-                            ),
-                            decoration: InputDecoration(
-                                labelText: "Titre |",
-                                border: new OutlineInputBorder(
-                                    borderSide: new BorderSide(
-                                      color: const Color(0xff444d5e),
-                                    )
-                                )
-                            ),
-                          ),
-                        ),
-
-                        SizedBox(height: 10.0),
-
-                        Container(
-                          width: double.infinity,
-                          height: width(context) / 5,
-                          child: TextField(
-                            focusNode: myDescriptionFocus,
-                            controller: myDescriptionController,
-                            keyboardType: TextInputType.multiline,
-                            style: TextStyle(
-                                fontSize: width(context) / 25
-                            ),
-                            decoration: InputDecoration(
-                                labelText: "Description |",
-                                border: new OutlineInputBorder(
-                                    borderSide: new BorderSide(
-                                      color: const Color(0xff444d5e),
-                                    )
-                                )
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  DateTimePicker(
-                    type: DateTimePickerType.dateTimeSeparate,
-                    dateMask: 'd MMM, yyyy',
-                    initialValue: DateTime.now().toString(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                    icon: Icon(Icons.event),
-                    dateLabelText: 'Date',
-                    timeLabelText: "Heure",
-                    selectableDayPredicate: (date) {
-                      // Disable weekend days to select from the calendar
-                      if (date.weekday == 6 || date.weekday == 7) {
-                        return false;
-                      }
-
-                      return true;
-                    },
-                    onChanged: (val) {
-                      times = val;
-                    },
-                    validator: (val) {
-                      times = val;
-                      return null;
-                    },
-                    onSaved: (val) {
-                      times = val;
-                    },
-                  ),
-
-                  //Choix des images ou videos et de la date des faits
-                  Container(
-                    height: width(context) / 10,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: getImage,
-                            child: Container(
-                              height: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: Center(
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      FontAwesomeIcons.image,
-                                      color: Colors.white,
-                                      size: width(context) / 15,
-                                    ),
-                                    Text(
-                                      sampleImage == null ?
-                                      '  Image' : '   Image ${'ok'}',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                        Icon(
+                          FontAwesomeIcons.comment,
+                          color: Colors.black,
+                          size: width(context) / 15,
                         ),
-
-                        SizedBox(width: 5.0),
-
-                        Divider(),
-
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: ()=> publierArticle(),
-                            child: Container(
-                              height: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: Center(
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                        'PUBLIER',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                        Text(
+                            '   Commenter',
+                            style: TextStyle(
+                                color: Colors.black
+                            )
                         )
                       ],
                     ),
                   ),
-
-                ],
-              ),
-            ),
-
-            Container(
-              height: 10.0,
-              decoration: BoxDecoration(
-                color: Colors.grey
-              ),
-            ),
-
-            SizedBox(height: 10.0),
-
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Card(
-                child: Column(
-                  children: articles.map((item){
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: utilisateurs(context, item.id, item),
-                            ),
-                            SizedBox(height: 0.0),
-                            GestureDetector(
-                              onTap: (){
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context){
-                                      return ItemDetails(comment: false, item: item,);
-                                    })
-                                );
-                              },
-                                child: Card(
-                                  elevation: 2.0,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: itemArticle(context, _scaffoldKey, item),
-                                    ))),
-                          ],
-                        ),
-                      );
-                    }).toList(),
                 ),
               ),
-            ),
+            )
           ],
         ),
-      ),
-    );
-  }
+      ],
+    ),
+  );
+}
+
 
   publierArticle() async{
 

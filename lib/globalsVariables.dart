@@ -12,6 +12,7 @@ import 'Controller/ProgressDialog.dart';
 import 'Model/Articles.dart';
 import 'Model/Commentaires.dart';
 import 'Model/Users.dart';
+import 'View/Page/Alerter.dart';
 
 double width(context) {
   return MediaQuery.of(context).size.width;
@@ -23,7 +24,7 @@ double height(context) {
 
 User currentFirebaseUser;
 
-List<Articles> articles;
+List<Articles> articles = [];
 List<Users> users;
 Users currentUsers;
 List<Invitation> invitations;
@@ -112,42 +113,41 @@ showDialogs(String text, context){
 Widget itemArticle(context, _scaffoldKey, Articles item){
   return Container(
     width: double.infinity,
-    height: width(context) / 1.4,
+    height: 306,
     child: Column(
       children: [
 
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      '${item.titre.toUpperCase()}',
-                      style: TextStyle(
-                        fontSize: 17.0,
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '${item.titre.toUpperCase()}',
+                        style: TextStyle(
+                          fontSize: 17.0,
+                          color: couleurText,                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 5.0,
-              ),
-              Text(
-                '${item.description}',
-                style: TextStyle(
-                  fontSize: 13.0,
-                  color: Color(0xFF343434),
+                  ],
                 ),
-              ),
-              SizedBox(
-                height: 5.0,
-              ),
-            ],
+                SizedBox(
+                  height: 8.0,
+                ),
+                Text(
+                  '${item.description}',
+                  style: TextStyle(
+                    fontSize: 13.0,
+                    color: couleurText,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
 
@@ -156,7 +156,7 @@ Widget itemArticle(context, _scaffoldKey, Articles item){
             clipBehavior: Clip.none,
             children: [
               Container(
-                height: width(context) / 2,
+                height: 185,
                 width: double.infinity,
                 decoration: BoxDecoration(
                     image: DecorationImage(
@@ -181,7 +181,7 @@ Widget itemArticle(context, _scaffoldKey, Articles item){
                 showInSnackBar("Vous avez liké", _scaffoldKey, context);
               },
               child: Container(
-                width: 45.0,
+                width: 60.0,
                 height: 45.0,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -191,7 +191,7 @@ Widget itemArticle(context, _scaffoldKey, Articles item){
                   children: [
                     Icon(
                       FontAwesomeIcons.solidHeart,
-                      color: Colors.red,
+                      color: couleurPrincipale,
                     ),
 
                     Text(
@@ -280,6 +280,8 @@ Widget utilisateurs(context, id, item){
               style: TextStyle(
                 fontFamily: 'Roboto',
                 fontSize: width(context) / 20,
+                color: couleurText,
+                fontWeight: FontWeight.bold
               ),
               textAlign: TextAlign.left,
             ),
@@ -290,6 +292,7 @@ Widget utilisateurs(context, id, item){
                 fontFamily: 'Roboto',
                 fontSize: width(context) / 26,
                 fontStyle: FontStyle.italic,
+                color: couleurText
               ),
               textAlign: TextAlign.left,
             )
@@ -306,20 +309,12 @@ Widget backButton(context){
       Navigator.pop(context);
     },
     child: Container(
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
-              Radius.circular(15)
-          ),
-          border: Border.all(
-            color: Colors.grey[300],
-            width: 1,
-          )
-      ),
+      width: 28,
+      height: 28,
       child: Icon(
-        Icons.keyboard_arrow_left,
-        color: Colors.black,
-        size: 28,
+        FontAwesomeIcons.arrowLeft,
+        color: couleurNeutre,
+        size: 20,
       ),
     ),
   );
@@ -327,42 +322,116 @@ Widget backButton(context){
 
 
 Widget item(String text, IconData icon, VoidCallback press){
-    return  Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: FlatButton(
-        padding: EdgeInsets.all(20),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.black.withOpacity(0.5),
-        onPressed: press,
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50.0),
-                border: Border.all(
-                  color: Colors.black
-                )
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  icon,
-                  color: Colors.white,
-                  size: 22,
+    return  Container(
+      height: 140.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.0),
+        color: Colors.black.withOpacity(0.5)
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            height: 50.0,
+            width: 50.0,
+            child: ClipOval(
+              clipBehavior: Clip.antiAlias,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.orange.withOpacity(0.5),
+                      Colors.amber,
+                      couleurPrincipale
+                    ]
+                  ),
+                  borderRadius: BorderRadius.circular(25.0),
+                  border: Border.all(color: Colors.amber)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: ClipOval(
+                    clipBehavior: Clip.antiAlias,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(25)
+                      ),
+                      child: Center(
+                        child: FlatButton(
+                          onPressed: press,
+                          child: Icon(
+                            icon,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            Text(
-                text,
+          ),
+
+          SizedBox(height: 8.0),
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              text.toLowerCase(),
               style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
+                color: Colors.white
               ),
               textAlign: TextAlign.center,
             ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
+
+
+Widget floatingAlert(context){
+  return GestureDetector(
+        onTap: (){
+          Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context){
+                                  return Alerter();
+                                })
+                            );
+        },
+        child: Container(
+          height: 56.0,
+          width: 56.0,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(56),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                couleurPrincipale,
+                Colors.amber,
+              ]
+            )
+          ),
+          child: Image.asset(
+            'assets/img/cloche.png',
+            height: 23.57,
+            width: 20.0,
+          ),
+        ),
+      );
+}
+const Color couleurPrincipale = const Color(0Xfffccd04);
+const Color couleurSecondaire = const Color(0Xfffc041c);
+const Color couleurNeutre = const Color(0Xff787E82);
+const Color couleurPrimaire = const Color(0Xff00B2FF);
+const Color couleurSuccess = const Color(0Xff00FF94);
+const Color couleurText = const Color(0xff556974);
