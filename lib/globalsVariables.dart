@@ -176,9 +176,12 @@ Widget itemArticle(context, _scaffoldKey, Articles item){
           children: [
             InkWell(
               onTap: () {
-                FirebaseFirestore.instance.collection('Articles').doc(item.uid)
+                  FirebaseFirestore.instance.collection('Articles').doc(item.uid)
                     .update({"like": FieldValue.increment(1)});
-                showInSnackBar("Vous avez liké", _scaffoldKey, context);
+                  FirebaseFirestore.instance.collection('Articles').doc(item.uid).collection('like')
+                  .doc(currentUsers.id).set({'uid' : currentUsers.id});
+                showInSnackBar("Vous avez likés", _scaffoldKey, context);
+                Navigator.popAndPushNamed(context, '/home');
               },
               child: Container(
                 width: 60.0,

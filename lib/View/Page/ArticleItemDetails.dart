@@ -32,39 +32,10 @@ class _ItemDetails extends State<ItemDetails>{
 
   TextEditingController myCommentController = new TextEditingController();
 
-  List<Commentaires> commentaires = [];
-
-  commente(){
-    commentaires.clear();
-    Query collectionReference = FirebaseFirestore.instance
-        .collection("Articles").doc(widget.item.uid)
-        .collection('comment')
-        .orderBy('timestamp', descending: true);
-
-
-    collectionReference
-        .snapshots()
-        .listen((data) { data.docs.forEach((doc) {
-
-        setState(() {
-          commentaires.add(
-            new Commentaires(
-              id: doc.get('id'),
-              description: doc.get("description"),
-              timestamp: doc.get('timestamp'),
-            )
-        );
-        });
-    });
-        }
-    );
-  }
-
 
   @override
   void initState() {
     comment = true;
-    commente();
 
     super.initState();
   }
@@ -130,9 +101,7 @@ class _ItemDetails extends State<ItemDetails>{
                   FirebaseFirestore.instance.collection('Articles').doc(widget.item.uid)
                       .update({"comment": FieldValue.increment(1)});
                   showInSnackBar("commentaire effectuée.", _scaffoldKey, context);
-
                   setState(() {
-                    comment = !comment;
                     myCommentController.clear();
                   });
                 })
@@ -168,7 +137,7 @@ class _ItemDetails extends State<ItemDetails>{
 
                     SizedBox(height: 8.0),
 
-                    itemArticle(context, _scaffoldKey, widget.item),
+                    itemArticles(context, _scaffoldKey, widget.item),
 
                     SizedBox(height: 16.0),
 
@@ -185,64 +154,85 @@ class _ItemDetails extends State<ItemDetails>{
 
                     SizedBox(height: 10.0),
 
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: commentaires.length == 0 ?
-                          Text("Aucun commentaires") :
-                      Wrap(
-                        spacing: 10.0,
-                        runSpacing: 10.0,
-                        children: commentaires.map((e){
-                          List<Users> utilisateurs = users
+                    Container(
+                      height: width(context),
+                      width: double.infinity,
+                      child: Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                                  .collection("Articles").doc(widget.item.uid)
+                                  .collection('comment')
+                                  .orderBy('timestamp', descending: true).snapshots(),
+                          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasError) {
+                              return Text('Something went wrong');
+                            }
+
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Text("Loading");
+                            }
+
+                            return ListView(
+                              children: snapshot.data?.docs.map((DocumentSnapshot document) {
+
+                              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+                              List<Users> utilisateurs = users
                               .where(
                                   (doc) => doc.id.toLowerCase()
-                                  .contains(e.id.toLowerCase()))
+                                  .contains(data['id'].toLowerCase()))
                               .toList();
-                          return Container(
-                            width: double.infinity,
-                            child: Row(
-                              children: [
-                                Container(
-                                  height: width(context) / 10,
-                                  child: CircleAvatar(
-                                    radius: 30.0,
-                                    backgroundImage:
-                                    NetworkImage('${utilisateurs[0].image}'),
-                                    backgroundColor: Colors.transparent,
-                                  ),
-                                ),
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                                  child: Container(
+                                      width: double.infinity,
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            height: width(context) / 10,
+                                            child: CircleAvatar(
+                                              radius: 30.0,
+                                              backgroundImage:
+                                              NetworkImage('${utilisateurs[0].image}'),
+                                              backgroundColor: Colors.transparent,
+                                            ),
+                                          ),
 
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '${utilisateurs[0].name}',
-                                      style: TextStyle(
-                                        fontFamily: 'Roboto',
-                                        fontSize: width(context) / 25,
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                '${utilisateurs[0].name}',
+                                                style: TextStyle(
+                                                  fontFamily: 'Roboto',
+                                                  fontSize: width(context) / 25,
+                                                ),
+                                                textAlign: TextAlign.left,
+                                              ),
+
+                                              Container(
+                                                width: width(context) / 2,
+                                                child: Text(
+                                                  '${data['description']}',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: width(context) / 30,
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        ],
                                       ),
-                                      textAlign: TextAlign.left,
                                     ),
-
-                                    Container(
-                                      width: width(context) / 2,
-                                      child: Text(
-                                        '${e.description}',
-                                        style: TextStyle(
-                                          fontFamily: 'Roboto',
-                                          fontSize: width(context) / 30,
-                                          fontStyle: FontStyle.italic,
-                                        ),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          );
-                        }).toList(),
+                                );
+                              }).toList(),
+                            );
+                          },
+                        )
                       ),
                     ),
 
@@ -256,4 +246,69 @@ class _ItemDetails extends State<ItemDetails>{
       )
     );
   }
+}
+
+Widget itemArticles(context, _scaffoldKey, Articles item){
+  return Container(
+    width: double.infinity,
+    height: 300,
+    child: Column(
+      children: [
+
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '${item.titre.toUpperCase()}',
+                        style: TextStyle(
+                          fontSize: 17.0,
+                          color: couleurText,                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 8.0,
+                ),
+                Text(
+                  '${item.description}',
+                  style: TextStyle(
+                    fontSize: 13.0,
+                    color: couleurText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        Expanded(
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: 185,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(
+                          '${item.image}'
+                      ),
+                    )
+                ),
+              ),
+            ]
+          ),
+        ),
+      ],
+    ),
+  );
 }

@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:safetysecurity/View/ActivityPrincipale.dart';
+import 'package:safetysecurity/View/Page/HomePage.dart';
 
 import 'View/Connexion.dart';
+import 'View/Page/ArticleItemDetails.dart';
 import 'globalsVariables.dart';
 
 Future<void> _messageHandler(RemoteMessage message) async {
@@ -60,6 +62,10 @@ class _MyApp extends State<MyApp>{
         navigatorObservers: [
           FirebaseAnalyticsObserver(analytics: analytics),
         ],
+        routes: <String, WidgetBuilder> {
+          '/home': (BuildContext context) => new HomePage(),
+          '/detail': (BuildContext context) => new ItemDetails()
+        },
     );
   }
 

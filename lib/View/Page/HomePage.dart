@@ -61,31 +61,41 @@ class _HomePage extends State<HomePage>{
     position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   }
 
-  article(){
+  article() {
     articles.clear();
 
-    Query collectionReference1 = FirebaseFirestore.instance
+    Query collectionReference1 =  FirebaseFirestore.instance
         .collection("Articles")
         .orderBy('timestamp', descending: true);
 
 
-    collectionReference1
+     collectionReference1
         .snapshots()
         .listen((data) => data.docs.forEach((doc) {
 
-      articles.add(
-            new Articles(
-                titre: doc.get('titre'),
-                description: doc.get("description"),
-                id: doc.get('id'),
-                date: doc.get('date'),
-                image: doc.get('image'),
-                timestamp: doc.get('timestamp'),
-                like: doc.get('like'),
-                comment: doc.get('comment'),
-                uid: doc.id
-            )
-        );
+          final snapshot = FirebaseFirestore.instance.collection('Articles')
+          .doc(doc.id).collection('like').snapshots();
+
+      snapshot.listen((event) {
+            setState(() {
+              if(articles.where((item) => item.uid == doc.id).isEmpty){
+                var like = event.docs.length;
+              articles.add(
+                new Articles(
+                    titre: doc.get('titre'),
+                    description: doc.get("description"),
+                    id: doc.get('id'),
+                    date: doc.get('date'),
+                    image: doc.get('image'),
+                    timestamp: doc.get('timestamp'),
+                    like: like,
+                    comment: doc.get('comment'),
+                    uid: doc.id
+                )
+            );
+              }
+            });
+      });
     })
     );
   }
@@ -123,7 +133,7 @@ class _HomePage extends State<HomePage>{
   void initState() {
     getPosition();
 
-    //article();
+    article();
 
     user();
 
@@ -513,41 +523,80 @@ class _HomePage extends State<HomePage>{
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Container(
-                    child: Column(
-                      children: articles.map((item){
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: couleurNeutre.withOpacity(0.5),
-                                ),
-                                borderRadius: BorderRadius.circular(10.0)
-                              ),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: utilisateurs(context, item.id, item),
+                    width: double.infinity,
+                    height: double.maxFinite,
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                              .collection("Articles")
+                              .orderBy('timestamp', 
+                              descending: true)
+                              .snapshots(),
+                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) 
+                      {
+                        if (snapshot.hasError) {
+                          return Text('Something went wrong');
+                        }
+
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Text("Loading");
+                        }
+
+                        return ListView(
+                          physics :NeverScrollableScrollPhysics(),
+                          children: snapshot.data?.docs.map((DocumentSnapshot document) {
+                            Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+
+                            Articles item;
+                            var like = 0;
+                            
+                            item = Articles(
+                                              titre: data['titre'],
+                                              description: data['description'],
+                                              id: data['id'],
+                                              date: data['date'],
+                                              image: data['image'],
+                                              timestamp: data['timestamp'],
+                                              like: like,
+                                              comment: data['comment'],
+                                              uid: document.id
+                                          );
+
+
+                             return Padding(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: couleurNeutre.withOpacity(0.5),
                                   ),
-                                  GestureDetector(
-                                    onTap: (){
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context){
-                                            return ItemDetails(comment: false, item: item,);
-                                          })
-                                      );
-                                    },
-                                      child: itemArticles(context, _scaffoldKey, item)),
-                                ],
+                                  borderRadius: BorderRadius.circular(10.0)
+                                ),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: utilisateurs(context, item.id, item),
+                                    ),
+                                    GestureDetector(
+                                      onTap: (){
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context){
+                                              return ItemDetails(comment: false, item: item,);
+                                            })
+                                        );
+                                      },
+                                        child: itemArticles(context, _scaffoldKey, item)),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        }).toList(),
-                    ),
-                  ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                      ),
+                    )
                 ),
               ],
             ),
@@ -753,9 +802,15 @@ Widget itemArticles(context, _scaffoldKey, Articles item){
           children: [
             InkWell(
               onTap: () {
-                FirebaseFirestore.instance.collection('Articles').doc(item.uid)
+                
+                  setState(() {
+                    FirebaseFirestore.instance.collection('Articles').doc(item.uid)
                     .update({"like": FieldValue.increment(1)});
-                showInSnackBar("Vous avez liké", _scaffoldKey, context);
+                  FirebaseFirestore.instance.collection('Articles').doc(item.uid).collection('like')
+                  .doc(currentUsers.id).set({'uid' : currentUsers.id});
+                showInSnackBar("Vous avez likés", _scaffoldKey, context);
+                  });
+                
               },
               child: Container(
                 width: 45.0,
@@ -771,12 +826,21 @@ Widget itemArticles(context, _scaffoldKey, Articles item){
                       color: couleurPrincipale,
                     ),
 
-                    Text(
+                    StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance.collection('Articles')
+                                .doc(item.uid).collection('like')
+                              .snapshots(),
+                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+                        return Text(' ${snapshot.data?.docs.length}');
+                      }
+                    )
+
+                    /*Text(
                         '${item.like}',
                         style: TextStyle(
                             color: Colors.black
                         )
-                    ),
+                    ),*/
                   ],
                 ),
               ),
@@ -875,8 +939,7 @@ Widget itemArticles(context, _scaffoldKey, Articles item){
     _firestore.collection('Articles').add(data);
     showInSnackBar("publication effectuée.", _scaffoldKey, context);
 
-    setState(() {
-      time != time;
-    });
+    time = !time;
+    Navigator.popAndPushNamed(context, '/home');
   }
 }
