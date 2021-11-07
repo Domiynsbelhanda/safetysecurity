@@ -123,7 +123,7 @@ class _HomePage extends State<HomePage>{
   void initState() {
     getPosition();
 
-    article();
+    //article();
 
     user();
 
@@ -874,5 +874,9 @@ Widget itemArticles(context, _scaffoldKey, Articles item){
     await
     _firestore.collection('Articles').add(data);
     showInSnackBar("publication effectuée.", _scaffoldKey, context);
+
+    setState(() {
+      time != time;
+    });
   }
 }

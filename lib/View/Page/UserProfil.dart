@@ -71,6 +71,7 @@ class _UserProfil extends State<UserProfil>{
     // TODO: implement build
     return Scaffold(
       backgroundColor: Colors.white,
+      floatingActionButton: floatingAlert(context),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 5.0,
@@ -216,12 +217,12 @@ class _UserProfil extends State<UserProfil>{
               SizedBox(height: 16.0),
 
               Padding(
-                padding: EdgeInsets.all(15.0),
+                padding: EdgeInsets.all(16.0),
                 child: Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
-                    color: Colors.limeAccent.withOpacity(0.5),
+                    color: couleurPrincipale.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(10.0)
                   ),
                   child: Column(
@@ -233,8 +234,9 @@ class _UserProfil extends State<UserProfil>{
                           Text(
                             'Adresses',
                             style: TextStyle(
-                              fontSize: width(context) / 16,
+                              fontSize: 20.0,
                               fontWeight: FontWeight.bold,
+                              color: Color(0Xff43462E)
                             ),
                             textAlign: TextAlign.start,
                           ),
@@ -254,9 +256,9 @@ class _UserProfil extends State<UserProfil>{
                                 child: Text(
                                     'Ajouter',
                                     style: TextStyle(
-                                        color: Colors.lightBlue,
+                                        color: couleurPrimaire,
                                         fontWeight: FontWeight.normal,
-                                      fontSize: width(context) / 20
+                                      fontSize: 14.0
                                     )
                                 ),
                               ),
@@ -268,7 +270,7 @@ class _UserProfil extends State<UserProfil>{
                       Column(
                         children: lieux.map((Lieu e){
                           return Padding(
-                            padding: const EdgeInsets.all(5.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Row(
                               children: [
                                 Icon(
@@ -277,15 +279,14 @@ class _UserProfil extends State<UserProfil>{
                                   size: width(context) / 18,
                                 ),
                                 SizedBox(width: 10.0),
-                                Container(
+                                Expanded(
                                   child: Text(
                                     '${e.adresse}',
                                     style: TextStyle(
                                         fontSize: width(context) / 18
                                     ),
                                   ),
-                                  width: width(context) / 1.4,
-                                )
+                                  )
                               ],
                             ),
                           );
