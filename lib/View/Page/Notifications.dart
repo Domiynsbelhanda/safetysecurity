@@ -23,10 +23,12 @@ class _Notifications extends State<Notifications>{
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  List<Invitation> invit;
+  List<Invitation> invit = [];
+  List alerte = [];
 
   @override
   void initState() {
+    alerte = alertes;
     invit = invitations.where((element) => element.destinataire.contains(currentFirebaseUser.uid)).toList();
   }
 
@@ -36,6 +38,7 @@ class _Notifications extends State<Notifications>{
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
+      floatingActionButton: floatingAlert(context),
       appBar: AppBar(
         elevation: 3.0,
         backgroundColor: Colors.white,
@@ -83,7 +86,20 @@ class _Notifications extends State<Notifications>{
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
+        child: alertes.toString() == "null" && invit.toString() == 'null' ? 
+        Text('Vous avez aucune notification') : 
+        invit.length == 0 ?
+        aDevant() :
+        alerte.length == 0 ?
+        iDevant() :
+        alertes[0]?.timestamp.toDate().isAfter(invit[0]?.timestamp.toDate()) ?
+        aDevant() : iDevant()
+      ),
+    );
+  }
+
+  Widget aDevant(){
+    return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 10.0,),
@@ -107,150 +123,188 @@ class _Notifications extends State<Notifications>{
               }).toList(),
             )
           ],
-        ),
-      ),
     );
+  }
+
+  Widget iDevant(){
+    return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 10.0,),
+            invit.length == 0 && alertes.length == 0 ? 
+            Text('Vous avez aucune notification') : 
+            Container(),
+
+            Column(
+              children: invit.map((e) {
+                return invitation(e);
+              }).toList(),
+            ),
+
+            Column(
+              children: alertes.map((e) {
+                if(e.vue){
+                  return Text('');
+                } else {
+                  return alert(e);
+                }
+              }).toList(),
+            )
+          ],
+        );
   }
 
   Widget invitation(Invitation item){
     List<Users> us = users.where((element) => element.id.contains(item.expeditaire)).toList();
     Users itemUser = us.first;
 
+    var times = timeago.format(item.timestamp.toDate());
+
     return Padding(
-      padding: EdgeInsets.all(10.0),
+      padding: EdgeInsets.all(16.0),
       child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: const Color(0xffe3f2fd),
-          borderRadius: BorderRadius.circular(5.0)
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Text(
-                'Vous avez une invitation de : '
+        height: 76.0,
+        child: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(56.0),
+                image: DecorationImage(
+                  image: NetworkImage('${itemUser.image}'),
+                  fit: BoxFit.cover
+                )
               ),
+              height: 56.0,
+              width: 56.0,
+            ),
+            SizedBox(width: 16.0,),
 
-              SizedBox(height: 3.0),
-
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    height: width(context) / 10,
-                    child: CircleAvatar(
-                      radius: 30.0,
-                      backgroundImage:
-                      NetworkImage('${itemUser.image}'),
-                      backgroundColor: Colors.transparent,
-                    ),
-                  ),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '${itemUser.name}',
+            Container(
+              width: width(context) - (56 + 16 + 16 +20),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 0.0),
+                child: Column(
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        text : '${itemUser.name.toUpperCase()}',
                         style: TextStyle(
                           fontFamily: 'Roboto',
+                          fontSize: 14.0,
+                          color: couleurPrimaire
                         ),
-                        textAlign: TextAlign.left,
-                      ),
-
-                      Text(
-                        '${itemUser.email}',
-                        style: TextStyle(
-                          fontFamily: 'Roboto',
-                          fontSize: width(context) / 30,
-                          fontStyle: FontStyle.italic,
-                        ),
-                        textAlign: TextAlign.left,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Container(
-                      child: TextButton(
-                        onPressed: () async{
-
-                          var data = {
-                            'id': item.expeditaire,
-                          };
-
-                          final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-                          await
-                          _firestore.collection('Users')
-                              .doc(currentFirebaseUser.uid)
-                              .collection('amis').doc(item.expeditaire)
-                              .set(data);
-                          
-                          var datas = {
-                            'id': currentFirebaseUser.uid,
-                          };
-
-                          await
-                          _firestore.collection('Users')
-                              .doc(item.expeditaire)
-                              .collection('amis').doc(currentFirebaseUser.uid)
-                              .set(datas);
-                          
-                          await
-                                _firestore.collection('Invitations')
-                                    .doc(item.uid).delete();
-
-                          setState(() {
-                            invit = invitations;
-                          });
-                          showInSnackBar('Invitation acceptée', _scaffoldKey, context);
-                        }, 
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: const Color(0xffe3f2fd),
-                          ),
-                          child: Text(
-                            'ACCEPTER'
-                          ),
-                        )
-                      ),
-                    ),
-                  ),
-
-                  Expanded(
-                    child: Container(
-                      child: TextButton(
-                        onPressed: () async{
-                          final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-                                await
-                                _firestore.collection('Invitations')
-                                    .doc(item.uid).delete();
-                          showInSnackBar('Invitation refusée', _scaffoldKey, context);
-                          setState(() {
-                            invit = invitations;
-                          });
-                        }, 
-                        child: Container(
-                          child: Text(
-                            'REFUSER',
+                        children: [
+                          TextSpan(
+                            text: ' vous a envoyé une invitation :',
                             style: TextStyle(
-                              color: const Color(0xffbf360c)
+                              color: couleurText
+                            )
+                          ),
+
+                          TextSpan(
+                            text: ' ${times}',
+                            style: TextStyle(
+                              color: couleurSecondaire
+                            )
+                          )
+                        ]
+                      ),
+                    ),
+
+                    SizedBox(height: 8.0),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: GestureDetector(
+                            onTap: () async{
+                              var data = {
+                                'id': item.expeditaire,
+                              };
+
+                              final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+                              await
+                              _firestore.collection('Users')
+                                  .doc(currentFirebaseUser.uid)
+                                  .collection('amis').doc(item.expeditaire)
+                                  .set(data);
+                              
+                              var datas = {
+                                'id': currentFirebaseUser.uid,
+                              };
+
+                              await
+                              _firestore.collection('Users')
+                                  .doc(item.expeditaire)
+                                  .collection('amis').doc(currentFirebaseUser.uid)
+                                  .set(datas);
+                              
+                              await
+                                    _firestore.collection('Invitations')
+                                        .doc(item.uid).delete();
+
+                              setState(() {
+                                invit = invitations;
+                              });
+                              showInSnackBar('Invitation acceptée', _scaffoldKey, context);
+                            
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(3.0),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: couleurPrimaire,
+                                  width: 2.0
+                                ),
+                                borderRadius: BorderRadius.circular(3.0),
+                              ),
+                              child: Text(
+                                'Accepter'
+                              ),
+                            ),
+                          )
+                        ),
+
+                        SizedBox(width: 8.0,),
+
+                        Container(
+                          child: GestureDetector(
+                            onTap: () async{
+                              final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+                                    await
+                                    _firestore.collection('Invitations')
+                                        .doc(item.uid).delete();
+                              showInSnackBar('Invitation refusée', _scaffoldKey, context);
+                              setState(() {
+                                invit = invitations;
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(3.0),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: couleurSecondaire,
+                                  width: 2.0
+                                ),
+                                borderRadius: BorderRadius.circular(3.0),
+                              ),
+                              child: Text(
+                                'Refuser',
+                                style: TextStyle(
+                                  color: couleurSecondaire
+                                ),
+                              ),
                             ),
                           ),
                         )
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
+                      ],
+                    )
+                  ],
+                )
+              ),
+            ),
+          ],
         ),
       ),
     );

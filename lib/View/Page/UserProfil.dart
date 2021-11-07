@@ -73,14 +73,16 @@ class _UserProfil extends State<UserProfil>{
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0.0,
+        elevation: 5.0,
         iconTheme: IconThemeData(
-          color: Colors.black
+          color: couleurNeutre
         ),
         title: Text(
             'Mon Profil',
           style: TextStyle(
-            color: Colors.black
+            color: couleurText,
+            fontWeight: FontWeight.w400,
+            fontSize: 20.0
           ),
         ),
         actions: [
@@ -93,12 +95,14 @@ class _UserProfil extends State<UserProfil>{
                   })
               );
             },
-            child: IconButton(
-              icon: Icon(
-                  Icons.notifications,
-                  color: Colors.black,
-                  size: width(context) / 10
-              ),
+            child: Container(
+              height: 40.0,
+              width: 40.0,
+              child: Icon(
+                    Icons.notifications,
+                    color: couleurNeutre,
+                    size: 24
+                ),
             ),
           ),
 
@@ -111,14 +115,14 @@ class _UserProfil extends State<UserProfil>{
                   })
               );
             },
-            child: IconButton(
-              icon: Icon(
+            child: Icon(
                   Icons.settings,
-                  color: Colors.black,
-                  size: width(context) / 10
+                  color: couleurNeutre,
+                  size: 30
               ),
-            ),
           ),
+
+          SizedBox(width: 16.0,)
         ],
       ),
       body: SingleChildScrollView(
@@ -145,63 +149,56 @@ class _UserProfil extends State<UserProfil>{
                             ),
                           ),
 
-                          SizedBox(height: 10.0,),
+                          SizedBox(height: 8.0,),
 
                           Text(
-                            '${currentUsers.name.toUpperCase()}',
+                            '${currentUsers.name}',
                             style: TextStyle(
                               fontFamily: 'Roboto',
-                              fontSize: width(context) / 15,
-                              fontWeight: FontWeight.normal,
-                              height: 1.0625,
-                              letterSpacing: 2,
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.w400,
+                              color: couleurNeutre
                             ),
-                            textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
-                            textAlign: TextAlign.center,
                           ),
 
                           Text(
                             '${currentUsers.email}',
                             style: TextStyle(
                               fontFamily: 'Roboto',
-                              fontSize: width(context) / 20,
-                              height: 1.0625,
-                              letterSpacing: 0,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400,
+                              color: couleurText
                             ),
-                            textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
-                            textAlign: TextAlign.center,
                           ),
 
                           Text(
                             '${currentUsers.telephone}',
                             style: TextStyle(
                               fontFamily: 'Roboto',
-                              fontSize: width(context) / 20,
-                              height: 1.0625,
-                              letterSpacing: 3.0,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400,
+                              color: couleurText
                             ),
-                            textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
-                            textAlign: TextAlign.center,
                           ),
 
-                          SizedBox(height: 20.0),
+                          SizedBox(height: 16.0),
 
                           Padding(
-                            padding: const EdgeInsets.only(left: 50.0, right: 50.0),
+                            padding: const EdgeInsets.only(left: 60.0, right: 60.0),
                             child: Container(
                               width: double.infinity,
                               decoration: BoxDecoration(
                                   color: Colors.transparent,
-                                  border: Border.all(color: Colors.lightBlue),
+                                  border: Border.all(color: couleurPrimaire),
                                   borderRadius: BorderRadius.circular(15.0)
                               ),
                               child: Center(
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                      '  Editer',
+                                      ' Editer',
                                       style: TextStyle(
-                                          color: Colors.lightBlue,
+                                          color: couleurPrimaire,
                                           fontWeight: FontWeight.normal
                                       )
                                   ),
@@ -216,7 +213,7 @@ class _UserProfil extends State<UserProfil>{
                 ],
               ),
 
-              SizedBox(height: 10.0),
+              SizedBox(height: 16.0),
 
               Padding(
                 padding: EdgeInsets.all(15.0),
